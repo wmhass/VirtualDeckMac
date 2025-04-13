@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>LSBackgroundOnly</key>
+    <true/>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>This app needs access to control the computer for triggering shortcuts and resizing windows.</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_vmchat._tcp</string>
+    </array>
+</dict>
+</plist>
