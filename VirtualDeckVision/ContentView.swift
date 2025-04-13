@@ -7,6 +7,37 @@
 
 import SwiftUI
 
+struct ContentView: View {
+    @StateObject private var peer = MultipeerManager()
+    @State private var messageToSend = ""
+
+    var body: some View {
+        VStack {
+            Text("Connected Peers:")
+                .font(.headline)
+            ForEach(peer.connectedPeers, id: \.self) { p in
+                Text(p.displayName)
+                    .font(.subheadline)
+            }
+//            Text("Messages:")
+//                .font(.headline)
+//            ForEach(peer.messages, id: \.self) { m in
+//                Text(m)
+//                    .font(.subheadline)
+//            }
+
+            FixedGridView(buttonClicked: { buttonIndex in
+                peer.send("\(buttonIndex)")
+            })
+        }
+        .padding()
+    }
+}
+#Preview(windowStyle: .automatic) {
+    ContentView()
+}
+
+
 struct FixedGridView: View {
     let items = Array(1...20)
     let buttonClicked: (Int) -> Void
@@ -37,34 +68,4 @@ struct FixedGridView: View {
             .padding()
         }
     }
-}
-
-struct ContentView: View {
-    @StateObject private var peer = MultipeerManager()
-    @State private var messageToSend = ""
-
-    var body: some View {
-        VStack {
-            Text("Connected Peers:")
-                .font(.headline)
-            ForEach(peer.connectedPeers, id: \.self) { p in
-                Text(p.displayName)
-                    .font(.subheadline)
-            }
-            Text("Messages:")
-                .font(.headline)
-            ForEach(peer.messages, id: \.self) { m in
-                Text(m)
-                    .font(.subheadline)
-            }
-
-            FixedGridView(buttonClicked: { buttonIndex in
-                peer.send("\(buttonIndex)")
-            })
-        }
-        .padding()
-    }
-}
-#Preview(windowStyle: .automatic) {
-    ContentView()
 }
