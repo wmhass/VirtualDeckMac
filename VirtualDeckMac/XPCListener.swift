@@ -8,11 +8,19 @@ import Foundation
 import AppKit
 
 extension XPCListener: MainAppXPCProtocol {
-    func handleNewCommand(clientId: String, command: String) {
+    func handleNewCommand(clientId: String, command: Data) {
         print("XPC Main App Received a message")
-        commandHandler.handleCommand(command: command)
-        DispatchQueue.main.async {
-            self.messages.append("\(clientId): \(command)")
+        do {
+            let decoder = JSONDecoder()
+            let decodedCommand = try decoder.decode(Command.self, from: command)
+            print("Decoded command: \(decodedCommand)")
+            // You can now handle the decoded command, for example:
+            commandHandler.handleCommand(command: decodedCommand)
+            DispatchQueue.main.async {
+                self.messages.append("Received: \(String(describing: decodedCommand))")
+            }
+        } catch {
+            print("Failed to decode command: \(error)")
         }
     }
 

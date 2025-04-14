@@ -9,7 +9,7 @@ import Foundation
 import MultipeerConnectivity
 
 protocol MultipeerManagerDelegate: AnyObject {
-    func handleCommand(_ command: String, clientId: String)
+    func handleCommand(_ command: Data, clientId: String)
     func clientsChanged(_ clients: [MCPeerID])
 }
 
@@ -58,6 +58,16 @@ class MultipeerManager: NSObject, ObservableObject {
             }
         }
     }
+
+    func send(command: Command) {
+        guard !session.connectedPeers.isEmpty else { return }
+        if let data = try? JSONEncoder().encode(command) {
+            try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+            DispatchQueue.main.async {
+                self.messages.append("You: \(String(describing: command))")
+            }
+        }
+    }
 }
 
 extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate {
@@ -72,7 +82,7 @@ extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let message = String(data: data, encoding: .utf8) {
             print("📩 Received message from \(peerID.displayName): \(message)")
-            delegate?.handleCommand(message, clientId: peerID.displayName)
+            delegate?.handleCommand(data, clientId: peerID.displayName)
             DispatchQueue.main.async {
                 self.messages.append("\(peerID.displayName): \(message)")
             }

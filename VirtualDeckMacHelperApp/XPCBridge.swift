@@ -17,8 +17,9 @@ extension XPCBridge: HelperAppXPCProtocol {
 }
 
 extension XPCBridge: MultipeerManagerDelegate {
-    func handleCommand(_ command: String, clientId: String) {
+    func handleCommand(_ command: Data, clientId: String) {
         mainAppProxy?.handleNewCommand(clientId: clientId, command: command)
+        print("handleCommand(_ command: String, clientId: String)")
     }
     
     func clientsChanged(_ clients: [MCPeerID]) {

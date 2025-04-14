@@ -103,16 +103,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B1C4FBB9-5C77-47DF-98DB-69459E5242E1"
+            uuid = "10ED8908-69A3-480D-ADEE-8BB5F375994B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VirtualDeckMac/XPCListener.swift"
+            filePath = "VirtualDeckMac/MultiPeerCommandHandler.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "listener(_:shouldAcceptNewConnection:)"
+            startingLineNumber = "12"
+            endingLineNumber = "12"
+            landmarkName = "handleCommand(command:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

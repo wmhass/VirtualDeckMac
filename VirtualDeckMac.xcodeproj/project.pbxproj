@@ -44,6 +44,7 @@
 		3D199EEB2DAB402B00A08DB9 /* Exceptions for "VirtualDeckMacHelperApp" folder in "VirtualDeckMac" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Commands.swift,
 				SharedXPCProtocols.swift,
 			);
 			target = 3D114E942DA82A63004B7E5F /* VirtualDeckMac */;
@@ -58,6 +59,7 @@
 		3D199F272DAC79AE00A08DB9 /* Exceptions for "VirtualDeckMacHelperApp" folder in "VirtualDeckVision" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Commands.swift,
 				MultipeerManager.swift,
 			);
 			target = 3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */;

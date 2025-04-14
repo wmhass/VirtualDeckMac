@@ -9,7 +9,8 @@ import Foundation
 
 
 @objc protocol MainAppXPCProtocol {
-    func handleNewCommand(clientId: String, command: String)
+    // Command can be converted to `Command`
+    func handleNewCommand(clientId: String, command: Data)
     func clientsUpdated(clients: [String])
     func handshake()
 }

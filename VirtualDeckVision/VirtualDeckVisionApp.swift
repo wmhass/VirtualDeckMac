@@ -11,13 +11,6 @@ import SwiftUI
 struct VirtualDeckVisionApp: App {
     var body: some Scene {
         WindowGroup {
-//            GeometryReader { geometry in
-//                let size = geometry.size
-//                Color.clear
-//                    .onChange(of: size) { newSize, oldSize in
-//                        print("Window size changed to: \(newSize.width) x \(newSize.height)")
-//                    }
-//            }
             ContentView()
         }
         .defaultSize(width: 410, height: 360)
