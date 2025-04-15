@@ -9,7 +9,7 @@ import Foundation
 import MultipeerConnectivity
 
 protocol MultipeerManagerDelegate: AnyObject {
-    func handleCommand(_ command: Data, clientId: String)
+    func handleNewMessage(clientId: String, data: Data)
     func clientsChanged(_ clients: [MCPeerID])
 }
 
@@ -49,22 +49,12 @@ class MultipeerManager: NSObject, ObservableObject {
         browser.startBrowsingForPeers()
     }
 
-    func send(_ message: String) {
+    func send(data: Data) {
         guard !session.connectedPeers.isEmpty else { return }
-        if let data = message.data(using: .utf8) {
-            try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+        try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+        if let dataString = String(data: data, encoding: .utf8) {
             DispatchQueue.main.async {
-                self.messages.append("You: \(message)")
-            }
-        }
-    }
-
-    func send(command: Command) {
-        guard !session.connectedPeers.isEmpty else { return }
-        if let data = try? JSONEncoder().encode(command) {
-            try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
-            DispatchQueue.main.async {
-                self.messages.append("You: \(String(describing: command))")
+                self.messages.append("You: \(String(describing: dataString))")
             }
         }
     }
@@ -82,11 +72,14 @@ extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let message = String(data: data, encoding: .utf8) {
             print("📩 Received message from \(peerID.displayName): \(message)")
-            delegate?.handleCommand(data, clientId: peerID.displayName)
             DispatchQueue.main.async {
                 self.messages.append("\(peerID.displayName): \(message)")
             }
         }
+        delegate?.handleNewMessage(
+            clientId: peerID.displayName,
+            data: data
+        )
     }
 
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID,

@@ -14,30 +14,6 @@ class MultiPeerCommandHandler {
             case .screenResize(let resizeType, let position):
                 resizeFrontmostWindow(to: calculateFrame(resizeType: resizeType, positionType: position))
             }
-//            switch command {
-//                case "1":
-//                    resizeFrontmostWindow(to: calculateLeftEdgeSixthWidthFrame())
-//                case "2":
-//                    resizeFrontmostWindow(to: calculateLeftEdgeThirdWidthFrame())
-//                case "3":
-//                    resizeFrontmostWindow(to: calculateRightThirdCenteredFrame())
-//                case "4":
-//                    resizeFrontmostWindow(to: calculateLeftHalfFrame())
-//                case "5":
-//                    resizeFrontmostWindow(to: calculateRightHalfFrame())
-//                case "6":
-//                    resizeFrontmostWindow(to: calculateLeftThirdEdgeCenteredFrame())
-//                case "7":
-//                    resizeFrontmostWindow(to: calculateRightEdgeThirdWidthFrame())
-//                case "8":
-//                    resizeFrontmostWindow(to: calculateRightEdgeSixthWidthFrame())
-//                case "9":
-//                    resizeFrontmostWindow(to: calculateThirdCenteredFrame())
-//                case "10":
-//                    resizeFrontmostWindow(to: calculateCenteredHalfFrame())
-//                default:
-//                    print("Command: \(command)")
-//            }
         }
     }
 }

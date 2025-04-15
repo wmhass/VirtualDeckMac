@@ -7,14 +7,12 @@
 
 import Foundation
 
-
 @objc protocol MainAppXPCProtocol {
-    // Command can be converted to `Command`
-    func handleNewCommand(clientId: String, command: Data)
+    // Command can be converted to `CrossDeviceMessage`
+    func handleNewMessage(clientId: String, data: Data)
     func clientsUpdated(clients: [String])
-    func handshake()
 }
 
 @objc protocol HelperAppXPCProtocol {
-    func sendCommand(_ command: String)
+    func send(data: Data)
 }

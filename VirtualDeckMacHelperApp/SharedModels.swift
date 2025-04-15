@@ -6,6 +6,22 @@
 //
 
 
+struct CrossDeviceMessage: Codable {
+    enum MessageType: Codable {
+        case command(command: IdentifiableCommand)
+        case commandsUpdate(commands: [IdentifiableCommand])
+        case textMessage(text: String)
+    }
+    let messageType: MessageType
+}
+
+struct IdentifiableCommand: Identifiable, Codable {
+    let id: String
+    let imageName: String
+    let command: Command
+}
+
+
 struct Command: Codable {
 
     enum ResizeType: Codable {

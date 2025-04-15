@@ -8,19 +8,19 @@ import Foundation
 import AppKit
 
 extension XPCListener: MainAppXPCProtocol {
-    func handleNewCommand(clientId: String, command: Data) {
+    func handleNewMessage(clientId: String, data: Data) {
+        let crossDeviceMessage = try! JSONDecoder().decode(CrossDeviceMessage.self, from: data)
         print("XPC Main App Received a message")
-        do {
-            let decoder = JSONDecoder()
-            let decodedCommand = try decoder.decode(Command.self, from: command)
-            print("Decoded command: \(decodedCommand)")
-            // You can now handle the decoded command, for example:
-            commandHandler.handleCommand(command: decodedCommand)
-            DispatchQueue.main.async {
-                self.messages.append("Received: \(String(describing: decodedCommand))")
-            }
-        } catch {
-            print("Failed to decode command: \(error)")
+        switch crossDeviceMessage.messageType {
+            case .command(let command):
+                commandHandler.handleCommand(command: command.command)
+            case .commandsUpdate(let commands):
+                break;
+            case .textMessage(text: let text):
+                break;
+        }
+        DispatchQueue.main.async {
+            self.messages.append("Received: \(String(describing: crossDeviceMessage))")
         }
     }
 
@@ -28,10 +28,87 @@ extension XPCListener: MainAppXPCProtocol {
         DispatchQueue.main.async {
             self.connectedClients = clients
         }
+        publishCommands()
     }
+}
 
-    func handshake() {
-        print("🤝 New connection handshake")
+extension XPCListener {
+    func publishCommands() {
+        let commands: [IdentifiableCommand] = [
+            IdentifiableCommand(
+                id: "1",
+                imageName: "command_1",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 6, height: 1),
+                    position: .topLeft
+                ))),
+            IdentifiableCommand(
+                id: "2",
+                imageName: "command_2",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 3, height: 1),
+                    position: .topLeft
+                ))),
+            IdentifiableCommand(
+                id: "3",
+                imageName: "command_3",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 3, height: 1),
+                    position: .rightEdgeCenterOfScreen
+                ))),
+            IdentifiableCommand(
+                id: "4",
+                imageName: "command_4",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 2, height: 1),
+                    position: .rightEdgeCenterOfScreen
+                ))),
+            IdentifiableCommand(
+                id: "5",
+                imageName: "command_5",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 2, height: 1),
+                    position: .leftEdgeCenterOfScreen
+                ))),
+            IdentifiableCommand(
+                id: "6",
+                imageName: "command_6",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 3, height: 1),
+                    position: .leftEdgeCenterOfScreen
+                ))),
+            IdentifiableCommand(
+                id: "7",
+                imageName: "command_7",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 3, height: 1),
+                    position: .topRight
+                ))),
+            IdentifiableCommand(
+                id: "8",
+                imageName: "command_8",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 6, height: 1),
+                    position: .topRight
+                ))),
+            IdentifiableCommand(
+                id: "9",
+                imageName: "command_9",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 3, height: 1),
+                    position: .centered
+                ))),
+            IdentifiableCommand(
+                id: "10",
+                imageName: "command_10",
+                command: Command(commandType: .screenResize(
+                    resizeType: .toFraction(width: 2, height: 1),
+                    position: .centered
+                )))
+        ]
+        let crossDeviceMessage = CrossDeviceMessage(messageType: .commandsUpdate(commands: commands))
+        let data = try! JSONEncoder().encode(crossDeviceMessage)
+        helperAppProxy?.send(data: data)
     }
 }
 
@@ -55,6 +132,8 @@ extension XPCListener: NSXPCListenerDelegate {
 
         connection.resume()
 
+        publishCommands()
+
         return true
     }
 }
@@ -74,9 +153,5 @@ class XPCListener: NSObject, ObservableObject {
 
     func startListening() {
         listener.resume()
-    }
-
-    func send(message: String) {
-        helperAppProxy?.sendCommand(message)
     }
 }

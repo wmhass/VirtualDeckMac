@@ -10,15 +10,15 @@ import AppKit
 import MultipeerConnectivity
 
 extension XPCBridge: HelperAppXPCProtocol {
-    func sendCommand(_ command: String) {
+    func send(data: Data) {
         print("Helper App received a message")
-        multiPeerManager.send(command)
+        multiPeerManager.send(data: data)
     }
 }
 
 extension XPCBridge: MultipeerManagerDelegate {
-    func handleCommand(_ command: Data, clientId: String) {
-        mainAppProxy?.handleNewCommand(clientId: clientId, command: command)
+    func handleNewMessage(clientId: String, data: Data) {
+        mainAppProxy?.handleNewMessage(clientId: clientId, data: data)
         print("handleCommand(_ command: String, clientId: String)")
     }
     
