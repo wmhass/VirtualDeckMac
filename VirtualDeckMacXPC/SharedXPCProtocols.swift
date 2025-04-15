@@ -7,12 +7,12 @@
 
 import Foundation
 
-@objc protocol MainAppXPCProtocol {
+@objc protocol XPCClientProtocol {
     // Command can be converted to `CrossDeviceMessage`
     func handleNewMessage(clientId: String, data: Data)
     func clientsUpdated(clients: [String])
 }
 
-@objc protocol HelperAppXPCProtocol {
+@objc protocol XPCServerProtocol {
     func send(data: Data)
 }

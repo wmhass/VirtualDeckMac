@@ -4,14 +4,12 @@
 <dict>
 	<key>CFBundleIdentifier</key>
 	<string></string>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_vmchat._tcp</string>
-	</array>
-    <key>MachServices</key>
-    <dict>
-        <key>com.williamhass.VirtualDeckMac</key>
-        <true/>
-    </dict>
+	<key>MachServices</key>
+	<dict>
+		<key>com.williamhass.VirtualDeckMacXPC</key>
+		<true/>
+		<key>com.williamhass.VirtualDeckMac</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

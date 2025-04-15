@@ -7,8 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D199EEF2DAB46FD00A08DB9 /* VirtualDeckMacHelperApp.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D199ED92DAB3E3300A08DB9 /* VirtualDeckMacHelperApp.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3DC7A1402DAED2F3001BA350 /* VirtualDeckMacXPC.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 3DC7A1342DAED2F3001BA350 /* VirtualDeckMacXPC.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3DC7A13E2DAED2F3001BA350 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D114E8D2DA82A63004B7E5F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DC7A1332DAED2F3001BA350;
+			remoteInfo = VirtualDeckMacXPC;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3D199E972DAB08C700A08DB9 /* Embed XPC Services */ = {
@@ -17,6 +27,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
+				3DC7A1402DAED2F3001BA350 /* VirtualDeckMacXPC.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -27,7 +38,6 @@
 			dstPath = Contents/Helpers;
 			dstSubfolderSpec = 1;
 			files = (
-				3D199EEF2DAB46FD00A08DB9 /* VirtualDeckMacHelperApp.app in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,20 +45,12 @@
 
 /* Begin PBXFileReference section */
 		3D114E952DA82A63004B7E5F /* VirtualDeckMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDeckMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D199ED92DAB3E3300A08DB9 /* VirtualDeckMacHelperApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDeckMacHelperApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D199F002DAC795200A08DB9 /* VirtualDeckVision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDeckVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D199F032DAC795200A08DB9 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
+		3DC7A1342DAED2F3001BA350 /* VirtualDeckMacXPC.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = VirtualDeckMacXPC.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3D199EEB2DAB402B00A08DB9 /* Exceptions for "VirtualDeckMacHelperApp" folder in "VirtualDeckMac" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				SharedModels.swift,
-				SharedXPCProtocols.swift,
-			);
-			target = 3D114E942DA82A63004B7E5F /* VirtualDeckMac */;
-		};
 		3D199F0D2DAC795400A08DB9 /* Exceptions for "VirtualDeckVision" folder in "VirtualDeckVision" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -56,7 +58,22 @@
 			);
 			target = 3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */;
 		};
-		3D199F272DAC79AE00A08DB9 /* Exceptions for "VirtualDeckMacHelperApp" folder in "VirtualDeckVision" target */ = {
+		3DC7A1442DAED2F3001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMacXPC" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */;
+		};
+		3DC7A1482DAEDC05001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMac" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SharedModels.swift,
+				SharedXPCProtocols.swift,
+			);
+			target = 3D114E942DA82A63004B7E5F /* VirtualDeckMac */;
+		};
+		3DC7A14E2DAEE2F8001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckVision" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				MultipeerManager.swift,
@@ -72,15 +89,6 @@
 			path = VirtualDeckMac;
 			sourceTree = "<group>";
 		};
-		3D199EDA2DAB3E3300A08DB9 /* VirtualDeckMacHelperApp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				3D199EEB2DAB402B00A08DB9 /* Exceptions for "VirtualDeckMacHelperApp" folder in "VirtualDeckMac" target */,
-				3D199F272DAC79AE00A08DB9 /* Exceptions for "VirtualDeckMacHelperApp" folder in "VirtualDeckVision" target */,
-			);
-			path = VirtualDeckMacHelperApp;
-			sourceTree = "<group>";
-		};
 		3D199F012DAC795200A08DB9 /* VirtualDeckVision */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -89,17 +97,20 @@
 			path = VirtualDeckVision;
 			sourceTree = "<group>";
 		};
+		3DC7A1352DAED2F3001BA350 /* VirtualDeckMacXPC */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3DC7A1482DAEDC05001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMac" target */,
+				3DC7A14E2DAEE2F8001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckVision" target */,
+				3DC7A1442DAED2F3001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMacXPC" target */,
+			);
+			path = VirtualDeckMacXPC;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3D114E922DA82A63004B7E5F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D199ED62DAB3E3300A08DB9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -113,6 +124,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3DC7A1312DAED2F3001BA350 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -120,9 +138,9 @@
 			isa = PBXGroup;
 			children = (
 				3D114E972DA82A63004B7E5F /* VirtualDeckMac */,
-				3D199EDA2DAB3E3300A08DB9 /* VirtualDeckMacHelperApp */,
 				3D199F012DAC795200A08DB9 /* VirtualDeckVision */,
 				3D199F022DAC795200A08DB9 /* Packages */,
+				3DC7A1352DAED2F3001BA350 /* VirtualDeckMacXPC */,
 				3D114E962DA82A63004B7E5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,8 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				3D114E952DA82A63004B7E5F /* VirtualDeckMac.app */,
-				3D199ED92DAB3E3300A08DB9 /* VirtualDeckMacHelperApp.app */,
 				3D199F002DAC795200A08DB9 /* VirtualDeckVision.app */,
+				3DC7A1342DAED2F3001BA350 /* VirtualDeckMacXPC.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,6 +179,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3DC7A13F2DAED2F3001BA350 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3D114E972DA82A63004B7E5F /* VirtualDeckMac */,
@@ -170,28 +189,6 @@
 			);
 			productName = VirtualDeckMac;
 			productReference = 3D114E952DA82A63004B7E5F /* VirtualDeckMac.app */;
-			productType = "com.apple.product-type.application";
-		};
-		3D199ED82DAB3E3300A08DB9 /* VirtualDeckMacHelperApp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D199EE22DAB3E3400A08DB9 /* Build configuration list for PBXNativeTarget "VirtualDeckMacHelperApp" */;
-			buildPhases = (
-				3D199ED52DAB3E3300A08DB9 /* Sources */,
-				3D199ED62DAB3E3300A08DB9 /* Frameworks */,
-				3D199ED72DAB3E3300A08DB9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				3D199EDA2DAB3E3300A08DB9 /* VirtualDeckMacHelperApp */,
-			);
-			name = VirtualDeckMacHelperApp;
-			packageProductDependencies = (
-			);
-			productName = VirtualDeckMacHelperApp;
-			productReference = 3D199ED92DAB3E3300A08DB9 /* VirtualDeckMacHelperApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */ = {
@@ -216,6 +213,28 @@
 			productReference = 3D199F002DAC795200A08DB9 /* VirtualDeckVision.app */;
 			productType = "com.apple.product-type.application";
 		};
+		3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DC7A1412DAED2F3001BA350 /* Build configuration list for PBXNativeTarget "VirtualDeckMacXPC" */;
+			buildPhases = (
+				3DC7A1302DAED2F3001BA350 /* Sources */,
+				3DC7A1312DAED2F3001BA350 /* Frameworks */,
+				3DC7A1322DAED2F3001BA350 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3DC7A1352DAED2F3001BA350 /* VirtualDeckMacXPC */,
+			);
+			name = VirtualDeckMacXPC;
+			packageProductDependencies = (
+			);
+			productName = VirtualDeckMacXPC;
+			productReference = 3DC7A1342DAED2F3001BA350 /* VirtualDeckMacXPC.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -229,10 +248,10 @@
 					3D114E942DA82A63004B7E5F = {
 						CreatedOnToolsVersion = 16.3;
 					};
-					3D199ED82DAB3E3300A08DB9 = {
+					3D199EFF2DAC795200A08DB9 = {
 						CreatedOnToolsVersion = 16.3;
 					};
-					3D199EFF2DAC795200A08DB9 = {
+					3DC7A1332DAED2F3001BA350 = {
 						CreatedOnToolsVersion = 16.3;
 					};
 				};
@@ -252,8 +271,8 @@
 			projectRoot = "";
 			targets = (
 				3D114E942DA82A63004B7E5F /* VirtualDeckMac */,
-				3D199ED82DAB3E3300A08DB9 /* VirtualDeckMacHelperApp */,
 				3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */,
+				3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */,
 			);
 		};
 /* End PBXProject section */
@@ -266,14 +285,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D199ED72DAB3E3300A08DB9 /* Resources */ = {
+		3D199EFE2DAC795200A08DB9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D199EFE2DAC795200A08DB9 /* Resources */ = {
+		3DC7A1322DAED2F3001BA350 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -290,13 +309,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D199ED52DAB3E3300A08DB9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3D199EFC2DAC795200A08DB9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,7 +316,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3DC7A1302DAED2F3001BA350 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3DC7A13F2DAED2F3001BA350 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */;
+			targetProxy = 3DC7A13E2DAED2F3001BA350 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3D114EA12DA82A64004B7E5F /* Debug */ = {
@@ -491,64 +518,6 @@
 			};
 			name = Release;
 		};
-		3D199EE32DAB3E3400A08DB9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = VirtualDeckMacHelperApp/VirtualDeckMacHelperApp.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R8DRDAPLCP;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VirtualDeckMacHelperApp/Info.plist;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamhass.VirtualDeckMacHelperApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		3D199EE42DAB3E3400A08DB9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = VirtualDeckMacHelperApp/VirtualDeckMacHelperApp.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R8DRDAPLCP;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VirtualDeckMacHelperApp/Info.plist;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamhass.VirtualDeckMacHelperApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		3D199F0F2DAC795400A08DB9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -604,6 +573,52 @@
 			};
 			name = Release;
 		};
+		3DC7A1422DAED2F3001BA350 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VirtualDeckMacXPC/VirtualDeckMacXPC.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8DRDAPLCP;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VirtualDeckMacXPC/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VirtualDeckMacXPC;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.williamhass.VirtualDeckMacXPC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3DC7A1432DAED2F3001BA350 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VirtualDeckMacXPC/VirtualDeckMacXPC.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8DRDAPLCP;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VirtualDeckMacXPC/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VirtualDeckMacXPC;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.williamhass.VirtualDeckMacXPC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -625,20 +640,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3D199EE22DAB3E3400A08DB9 /* Build configuration list for PBXNativeTarget "VirtualDeckMacHelperApp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D199EE32DAB3E3400A08DB9 /* Debug */,
-				3D199EE42DAB3E3400A08DB9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		3D199F0E2DAC795400A08DB9 /* Build configuration list for PBXNativeTarget "VirtualDeckVision" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D199F0F2DAC795400A08DB9 /* Debug */,
 				3D199F102DAC795400A08DB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DC7A1412DAED2F3001BA350 /* Build configuration list for PBXNativeTarget "VirtualDeckMacXPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DC7A1422DAED2F3001BA350 /* Debug */,
+				3DC7A1432DAED2F3001BA350 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -11,13 +11,13 @@ import ApplicationServices
 
 struct ContentView: View {
     @State private var messageToSend = ""
-    @EnvironmentObject private var xpcListener: XPCListener
+    @EnvironmentObject private var appDelegate: AppDelegate
 
     var body: some View {
         VStack {
             Text("Connected Peers:")
                 .font(.headline)
-            ForEach(xpcListener.connectedClients, id: \.self) { p in
+            ForEach(appDelegate.connectedClients, id: \.self) { p in
                 Text(p)
                     .font(.subheadline)
             }
@@ -26,7 +26,7 @@ struct ContentView: View {
 
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(xpcListener.messages, id: \.self) { msg in
+                    ForEach(appDelegate.messages, id: \.self) { msg in
                         Text(msg)
                             .padding(4)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,7 +42,8 @@ struct ContentView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button("Send") {
                     let dataToSend = try! JSONEncoder().encode(CrossDeviceMessage(messageType: .textMessage(text: messageToSend)))
-                    xpcListener.helperAppProxy?.send(data: dataToSend)
+                    appDelegate.xpcServer?.send(data: dataToSend)
+                    print("XPC Server: \(String(describing: appDelegate.xpcServer))")
                     messageToSend = ""
                 }
             }

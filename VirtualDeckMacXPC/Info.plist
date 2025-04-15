@@ -2,15 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>SchemeUserState</key>
-	<dict/>
-	<key>SuppressBuildableAutocreation</key>
+	<key>XPCService</key>
 	<dict>
-		<key>RealityKitContent</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
+		<key>ServiceType</key>
+		<string>Application</string>
 	</dict>
 </dict>
 </plist>
