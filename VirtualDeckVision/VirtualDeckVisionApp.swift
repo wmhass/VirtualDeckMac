@@ -8,39 +8,62 @@
 import SwiftUI
 
 import MultipeerConnectivity
-class PeerDelegate: MultipeerManagerDelegate, ObservableObject {
+class MPCBrowserDelegate: NSObject, MCSessionDelegate, ObservableObject {
+
     @Published var commands: [IdentifiableCommand] = []
-    func handleNewMessage(clientId: String, data: Data) {
+    @Published var connectedPeers: [String] = []
+
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+        DispatchQueue.main.async {
+            self.connectedPeers = session.connectedPeers.map(\.displayName)
+        }
+    }
+
+    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         let crossDeviceMessage = try! JSONDecoder().decode(CrossDeviceMessage.self, from: data)
         switch crossDeviceMessage.messageType {
-            case .command(command: let command):
-                print("Apple vision pro received command")
             case .commandsUpdate(commands: let commands):
                 DispatchQueue.main.async {
                     self.commands = commands
                 }
-            case .textMessage(text: let text):
+            case .command, .textMessage:
+                print("Browser does not support those commands")
                 break;
         }
     }
-    func clientsChanged(_ clients: [MCPeerID]) {
+
+    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
     }
+
+    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
+    }
+
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: (any Error)?) {
+    }
+
+
 }
 
 @main
 struct VirtualDeckVisionApp: App {
-    let peer = MultipeerManager()
-    let peerDelegate = PeerDelegate()
+    let browser = MPCBrowser()
+    let browserDelegate = MPCBrowserDelegate()
 
     init() {
-        peer.delegate = peerDelegate
+        browser.sessionDelegateBridge = browserDelegate
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(peer)
-                .environmentObject(peerDelegate)
+            ContentView(sendCommand: { command in
+                do {
+                    try browser.sendCrossDeviceMessage(CrossDeviceMessage(
+                        messageType: .command(command: command)
+                    ))
+                } catch {
+                    print("Error sending command: \(error)")
+                }
+            }).environmentObject(browserDelegate)
         }
         .defaultSize(width: 410, height: 360)
     }

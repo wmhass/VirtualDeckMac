@@ -9,29 +9,29 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var messageToSend = ""
-    @EnvironmentObject var peer: MultipeerManager
-    @EnvironmentObject var peerDelegate: PeerDelegate
+    @EnvironmentObject var browserDelegate: MPCBrowserDelegate
+    let sendCommand: (IdentifiableCommand) -> Void
 
     var body: some View {
         VStack {
             Text("Connected Peers:")
                 .font(.headline)
-            ForEach(peer.connectedPeers, id: \.self) { p in
-                Text(p.displayName)
+            ForEach(browserDelegate.connectedPeers, id: \.self) { p in
+                Text(p)
                     .font(.subheadline)
             }
 
-            FixedGridView(commands: peerDelegate.commands, buttonClicked: { item in
-                let crossDeviceMessage = CrossDeviceMessage(messageType: .command(command: item))
-                let dataCommand = try! JSONEncoder().encode(crossDeviceMessage)
-                peer.send(data: dataCommand)
+            FixedGridView(commands: browserDelegate.commands, buttonClicked: { item in
+                sendCommand(item)
             })
         }
         .padding()
     }
 }
 #Preview(windowStyle: .automatic) {
-    ContentView()
+    ContentView { _ in
+
+    }
 }
 
 struct FixedGridView: View {
@@ -39,7 +39,7 @@ struct FixedGridView: View {
     let buttonClicked: (IdentifiableCommand) -> Void
 
     let columns = [
-        GridItem(.adaptive(minimum: 60, maximum: 60), spacing: 16)
+        GridItem(.adaptive(minimum: 64, maximum: 64), spacing: 16)
     ]
 
     var body: some View {
@@ -55,9 +55,9 @@ struct FixedGridView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 36, height: 36)
                         }
-                        .frame(width: 60, height: 60)
+                        .frame(width: 64, height: 64)
                     })
-                    .cornerRadius(1)
+                    .cornerRadius(0.2)
                     .buttonStyle(BorderedButtonStyle())
                 }
             }

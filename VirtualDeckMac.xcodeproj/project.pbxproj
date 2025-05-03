@@ -68,8 +68,9 @@
 		3DC7A1482DAEDC05001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMac" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				MacSharedStorages.swift,
 				SharedModels.swift,
-				SharedXPCProtocols.swift,
+				SharedXPC.swift,
 			);
 			target = 3D114E942DA82A63004B7E5F /* VirtualDeckMac */;
 		};

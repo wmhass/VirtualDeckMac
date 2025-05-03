@@ -41,8 +41,15 @@ struct ContentView: View {
                 TextField("Type a message", text: $messageToSend)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button("Send") {
-                    let dataToSend = try! JSONEncoder().encode(CrossDeviceMessage(messageType: .textMessage(text: messageToSend)))
-                    appDelegate.xpcServer?.send(data: dataToSend)
+                    try? appDelegate.xpcServer?.handleMessageFromClient(
+                        xpcMessage: XPCMessage(
+                            messageType: .crossDeviceMessage(
+                                message: CrossDeviceMessage(
+                                    messageType: .textMessage(text: messageToSend)
+                                )
+                            )
+                        )
+                    )
                     print("XPC Server: \(String(describing: appDelegate.xpcServer))")
                     messageToSend = ""
                 }
