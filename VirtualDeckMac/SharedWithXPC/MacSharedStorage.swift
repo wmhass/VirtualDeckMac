@@ -13,39 +13,30 @@ extension UserDefaults {
     }
 }
 
-struct AuthCodeStorage {
+struct MacSharedStorage {
     let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults = .groupDefaults) {
         self.userDefaults = userDefaults
     }
 
-    func store(_ authCode: String) {
-        userDefaults.set(authCode, forKey: "authCode")
-    }
-
+    // MARK: - Auth Code
     var authCode: String? {
         userDefaults.string(forKey: "authCode")
     }
-}
 
-struct TrustedDevicesStorage {
-    let userDefaults: UserDefaults
-    init(userDefaults: UserDefaults = .groupDefaults) {
-        self.userDefaults = userDefaults
+    func store(authCode: String) {
+        userDefaults.set(authCode, forKey: "authCode")
     }
 
+    // MARK: - Trusted Devices
     var trustedDevices: [String] {
         return userDefaults.array(forKey: "trustedDevices") as? [String] ?? []
     }
 
-    func trustDevice(id: String) {
+    func store(trustedDevice: String) {
         var trustedDevices = self.trustedDevices
-        trustedDevices.append(id)
+        trustedDevices.append(trustedDevice)
         userDefaults.set(trustedDevices, forKey: "trustedDevices")
-    }
-
-    func isDeviceTrusted(id: String) -> Bool {
-        return trustedDevices.contains(id)
     }
 }

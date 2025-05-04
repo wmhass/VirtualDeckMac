@@ -1,5 +1,5 @@
 //
-//  Commands.swift
+//  CrossDeviceMessage.swift
 //  VirtualDeckMac
 //
 //  Created by William Hass on 2025-04-14.

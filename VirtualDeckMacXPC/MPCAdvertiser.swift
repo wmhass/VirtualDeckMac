@@ -8,17 +8,24 @@ import MultipeerConnectivity
 
 class MPCAdvertiser: NSObject {
     private let serviceType = "vmchat"
-    private let myPeerID: MCPeerID
     private let session: MCSession
     private let advertiser: MCNearbyServiceAdvertiser
-    private let authCodeStorage: AuthCodeStorage = AuthCodeStorage()
-    private let trustedDevicesStorage: TrustedDevicesStorage = TrustedDevicesStorage()
+    private let macSharedStorage = MacSharedStorage()
+    private let peerIdStorage = PeerIdStorage()
     var sessionDelegateBridge: MCSessionDelegate?
+    private(set) var peerIdContext: [MCPeerID: MPCContext] = [:]
 
     override init() {
-        myPeerID = PeerIdStorage.peerId ?? PeerIdStorage.generateAndStorePeerId(prefix: "Mac")
-        session = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .required)
-        advertiser = MCNearbyServiceAdvertiser(peer: myPeerID, discoveryInfo: nil, serviceType: serviceType)
+        UserDefaults.standard.set(nil, forKey: "peerId")
+        let prefix = "Mac"
+        let peerIdString = peerIdStorage.peerId ?? peerIdStorage.generateAndStorePeerId(prefix: prefix)
+        let peerId = MCPeerID(displayName: peerIdString)
+        session = MCSession(peer: peerId, securityIdentity: nil, encryptionPreference: .required)
+        advertiser = MCNearbyServiceAdvertiser(
+            peer: peerId,
+            discoveryInfo: ["readableName": Host.current().localizedName ?? "Mac"],
+            serviceType: serviceType
+        )
         super.init()
         session.delegate = self
         advertiser.delegate = self
@@ -34,14 +41,20 @@ class MPCAdvertiser: NSObject {
 extension MPCAdvertiser: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID,
                     withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        if trustedDevicesStorage.isDeviceTrusted(id: peerID.displayName) {
+        guard let context, let mpcContext = try? JSONDecoder().decode(MPCContext.self, from: context) else {
+            print("🚫 Rejecting \(peerID.displayName)")
+            invitationHandler(false, session)
+            return
+        }
+        if macSharedStorage.trustedDevices.contains(peerID.displayName) {
             print("🔐 Already trusted device invited: \(peerID.displayName)")
+            peerIdContext[peerID] = mpcContext
             invitationHandler(true, session)
-        } else if let context,
-                  let handshake = try? JSONDecoder().decode(Handkshake.self, from: context),
-                  handshake.authCode == authCodeStorage.authCode {
-            trustedDevicesStorage.trustDevice(id: peerID.displayName)
+        } else if let handshake = mpcContext.handshake,
+                  handshake.authCode == macSharedStorage.authCode {
+            macSharedStorage.store(trustedDevice: peerID.displayName)
             print("🔐 Trusted device invited: \(peerID.displayName)")
+            peerIdContext[peerID] = mpcContext
             invitationHandler(true, session)
         } else {
             print("🚫 Rejecting \(peerID.displayName)")

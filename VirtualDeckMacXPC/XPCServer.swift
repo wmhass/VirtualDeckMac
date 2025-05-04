@@ -37,9 +37,12 @@ extension XPCServer: NSXPCListenerDelegate {
 extension XPCServer: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         do {
+            let connectedClients = session.connectedPeers.compactMap {
+                advertiser.peerIdContext[$0]?.deviceReadableName
+            }
             try connectedXpcClient?.handleMessageFromServer(
                 xpcMessage: XPCMessage(
-                    messageType: .clientsUpdated(clients: session.connectedPeers.map(\.displayName))
+                    messageType: .clientsUpdated(clients: connectedClients)
                 )
             )
         } catch {

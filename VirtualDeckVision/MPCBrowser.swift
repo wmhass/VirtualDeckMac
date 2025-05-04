@@ -8,15 +8,17 @@ import MultipeerConnectivity
 
 class MPCBrowser: NSObject {
     private let serviceType = "vmchat"
-    private let myPeerID: MCPeerID
     private let session: MCSession
     private let browser: MCNearbyServiceBrowser
-    var sessionDelegateBridge: MCSessionDelegate?
+    private let peerIdStorage = PeerIdStorage()
+    weak var sessionDelegateBridge: MCSessionDelegate?
+    private(set) var peerIdDiscoveryInfo: [MCPeerID: [String: String]] = [:]
 
     override init() {
-        myPeerID = PeerIdStorage.peerId ?? PeerIdStorage.generateAndStorePeerId(prefix: "VisionPro")
-        session = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .required)
-        browser = MCNearbyServiceBrowser(peer: myPeerID, serviceType: serviceType)
+        let peerIdString = peerIdStorage.peerId ?? peerIdStorage.generateAndStorePeerId(prefix: "VisionPro")
+        let peerId = MCPeerID(displayName: peerIdString)
+        session = MCSession(peer: peerId, securityIdentity: nil, encryptionPreference: .required)
+        browser = MCNearbyServiceBrowser(peer: peerId, serviceType: serviceType)
         super.init()
         session.delegate = self
         browser.delegate = self
@@ -33,12 +35,16 @@ class MPCBrowser: NSObject {
 extension MPCBrowser: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
                  withDiscoveryInfo info: [String : String]?) {
+        peerIdDiscoveryInfo[peerID] = info ?? [:]
         print("Found peer: \(peerID)")
-        let handshake = Handkshake(authCode: "123456")
+        let context = MPCContext(
+            handshake: Handshake(authCode: "123456"),
+            deviceReadableName: UIDevice.current.name
+        )
         browser.invitePeer(
             peerID,
             to: session,
-            withContext: try? JSONEncoder().encode(handshake),
+            withContext: try? JSONEncoder().encode(context),
             timeout: 30
         )
     }

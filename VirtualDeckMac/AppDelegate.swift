@@ -12,14 +12,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var xpcServer: XPCServerProtocol?
     var connection: NSXPCConnection?
     let commandHandler = CommandHandler()
-
+    let storage = MacSharedStorage()
 
     @Published var messages: [String] = []
     @Published var connectedClients: [String] = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let authCodeStorage = AuthCodeStorage()
-        authCodeStorage.store("123456")
+        storage.store(authCode: "123456")
         print("✅ AppDelegate: did finish launching")
         connectToXPC()
     }

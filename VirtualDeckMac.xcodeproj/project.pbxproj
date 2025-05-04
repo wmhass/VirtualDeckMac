@@ -58,6 +58,22 @@
 			);
 			target = 3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */;
 		};
+		3D94313F2DC6DEF400B080A7 /* Exceptions for "VirtualDeckMac" folder in "VirtualDeckMacXPC" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SharedWithXPC/MacSharedStorage.swift,
+				SharedWithXPC/SharedXPC.swift,
+				SharedWithXPCAndVisionPro/CrossDeviceMessage.swift,
+			);
+			target = 3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */;
+		};
+		3D9431492DC6E47900B080A7 /* Exceptions for "VirtualDeckMac" folder in "VirtualDeckVision" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SharedWithXPCAndVisionPro/CrossDeviceMessage.swift,
+			);
+			target = 3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */;
+		};
 		3DC7A1442DAED2F3001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMacXPC" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -65,20 +81,11 @@
 			);
 			target = 3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */;
 		};
-		3DC7A1482DAEDC05001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMac" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MacSharedStorages.swift,
-				SharedModels.swift,
-				SharedXPC.swift,
-			);
-			target = 3D114E942DA82A63004B7E5F /* VirtualDeckMac */;
-		};
 		3DC7A14E2DAEE2F8001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckVision" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				MultipeerManager.swift,
-				SharedModels.swift,
+				SharedWithVision/MPCContext.swift,
+				SharedWithVision/PeerIdStorage.swift,
 			);
 			target = 3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */;
 		};
@@ -87,6 +94,10 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3D114E972DA82A63004B7E5F /* VirtualDeckMac */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3D9431492DC6E47900B080A7 /* Exceptions for "VirtualDeckMac" folder in "VirtualDeckVision" target */,
+				3D94313F2DC6DEF400B080A7 /* Exceptions for "VirtualDeckMac" folder in "VirtualDeckMacXPC" target */,
+			);
 			path = VirtualDeckMac;
 			sourceTree = "<group>";
 		};
@@ -101,7 +112,6 @@
 		3DC7A1352DAED2F3001BA350 /* VirtualDeckMacXPC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				3DC7A1482DAEDC05001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMac" target */,
 				3DC7A14E2DAEE2F8001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckVision" target */,
 				3DC7A1442DAED2F3001BA350 /* Exceptions for "VirtualDeckMacXPC" folder in "VirtualDeckMacXPC" target */,
 			);
@@ -524,6 +534,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VirtualDeckVision/VirtualDeckVision.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R8DRDAPLCP;
@@ -551,6 +562,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VirtualDeckVision/VirtualDeckVision.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R8DRDAPLCP;
