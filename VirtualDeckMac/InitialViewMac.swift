@@ -13,9 +13,15 @@ struct InitialViewMac: View {
     @State private var messageToSend = ""
     @State private var showPairCodeInputText: Bool = false
     @EnvironmentObject private var appDelegate: AppDelegate
+    @State private var hasAccessibilityEnabled: Bool = true
 
     var body: some View {
         VStack(spacing: 24) {
+            if !hasAccessibilityEnabled {
+                Text("Accessibility Permission Required")
+                    .font(.title)
+                Text("Open System Settings > Privacy & Security > Accessibility and give ActionDeck accessibility permission to be able to resize windows and trigger shortcuts.")
+            }
             VStack(spacing: 8) {
                 Text("Connected devices")
                     .font(.title)
@@ -53,7 +59,14 @@ struct InitialViewMac: View {
                 }
             }
         }
-        .frame(width: 300, height: 300)
+        .frame(width: 300, height: 400)
+        .onAppear {
+            if !AXIsProcessTrusted() {
+                let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
+                let trusted = AXIsProcessTrustedWithOptions(options)
+                hasAccessibilityEnabled = trusted
+            }
+        }
     }
 }
 
