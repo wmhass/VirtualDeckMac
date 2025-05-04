@@ -30,14 +30,13 @@ extension XPCServer: NSXPCListenerDelegate {
         }
         connectedXpcClient = newConnection.remoteObjectProxy as? XPCClientProtocol
         newConnection.resume()
+        updateXPCClientWithConnectedClients()
         return true
     }
-}
 
-extension XPCServer: MCSessionDelegate {
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+    private func updateXPCClientWithConnectedClients() {
         do {
-            let connectedClients = session.connectedPeers.compactMap {
+            let connectedClients = advertiser.session.connectedPeers.compactMap {
                 advertiser.peerIdContext[$0]?.deviceReadableName
             }
             try connectedXpcClient?.handleMessageFromServer(
@@ -48,6 +47,12 @@ extension XPCServer: MCSessionDelegate {
         } catch {
             print("Error handling cross device message: \(error)")
         }
+    }
+}
+
+extension XPCServer: MCSessionDelegate {
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+        updateXPCClientWithConnectedClients()
     }
 
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -88,7 +93,7 @@ extension XPCServer: XPCServerProtocol {
                     break;
             }
         } catch {
-            print("Error handling XPC Message: \(error)")
+            print("Error handling XPC Message: \(error) // \(String(describing: String(data: data, encoding: .utf8)))")
         }
     }
 }

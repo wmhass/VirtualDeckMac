@@ -7,8 +7,8 @@
 import MultipeerConnectivity
 
 class MPCAdvertiser: NSObject {
+    let session: MCSession
     private let serviceType = "vmchat"
-    private let session: MCSession
     private let advertiser: MCNearbyServiceAdvertiser
     private let macSharedStorage = MacSharedStorage()
     private let peerIdStorage = PeerIdStorage()
@@ -34,6 +34,9 @@ class MPCAdvertiser: NSObject {
     }
 
     func sendCrossDeviceMessage(_ crossDeviceMessage: CrossDeviceMessage) throws {
+        guard !session.connectedPeers.isEmpty else {
+            return
+        }
         let data = try JSONEncoder().encode(crossDeviceMessage)
         try session.send(data, toPeers: session.connectedPeers, with: .reliable)
     }

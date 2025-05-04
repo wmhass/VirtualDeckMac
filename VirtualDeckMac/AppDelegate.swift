@@ -76,7 +76,7 @@ extension AppDelegate: XPCClientProtocol {
                             break;
                     }
                 case .clientsUpdated(clients: let clients):
-                    print("Clients updated")
+                    print("Clients updated: \(String(describing: clients))")
                     DispatchQueue.main.async {
                         self.connectedClients = clients
                     }

@@ -41,5 +41,6 @@ struct VirtualDeckMacApp: App {
                 .environmentObject(appDelegate)
         }
         .modelContainer(sharedModelContainer)
+        .windowResizability(.contentSize)
     }
 }
