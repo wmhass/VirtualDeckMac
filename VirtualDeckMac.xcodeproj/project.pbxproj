@@ -152,6 +152,7 @@
 				3D199F012DAC795200A08DB9 /* VirtualDeckVision */,
 				3D199F022DAC795200A08DB9 /* Packages */,
 				3DC7A1352DAED2F3001BA350 /* VirtualDeckMacXPC */,
+				3D94315B2DC8122800B080A7 /* Frameworks */,
 				3D114E962DA82A63004B7E5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -172,6 +173,13 @@
 				3D199F032DAC795200A08DB9 /* RealityKitContent */,
 			);
 			path = Packages;
+			sourceTree = "<group>";
+		};
+		3D94315B2DC8122800B080A7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,6 +284,8 @@
 			);
 			mainGroup = 3D114E8C2DA82A63004B7E5F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3D114E962DA82A63004B7E5F /* Products */;
 			projectDirPath = "";

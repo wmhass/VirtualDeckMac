@@ -1,17 +1,17 @@
 //
-//  MPCBrowserDelegate.swift
+//  MPCBrowserManager.swift
 //  VirtualDeckMac
 //
 //  Created by William Hass on 2025-05-04.
 //
 
 import MultipeerConnectivity
-class MPCBrowserDelegate: NSObject, ObservableObject {
+class MPCBrowserManager: NSObject, ObservableObject {
 
     let browser = MPCBrowser()
-    @Published var commands: [IdentifiableCommand] = []
-    @Published var connectedPeers: [String] = []
-    @Published var hasAdvertiserSetup: Bool = false
+    @Published @MainActor var commands: [IdentifiableCommand] = []
+    @Published @MainActor var connectedPeers: [String] = []
+    @Published @MainActor var hasAdvertiserSetup: Bool = false
     private(set) var peerIdDiscoveryInfo: [MCPeerID: [String: String]] = [:]
     private let storage = VisionProStorage()
 
@@ -19,7 +19,9 @@ class MPCBrowserDelegate: NSObject, ObservableObject {
         super.init()
         browser.sessionDelegateBridge = self
         browser.browserDelegateBridge = self
-        hasAdvertiserSetup = storage.advertiserId != nil
+        Task { @MainActor in
+            hasAdvertiserSetup = storage.advertiserId != nil
+        }
     }
 
     func pair(pairingCode: String) {
@@ -28,11 +30,13 @@ class MPCBrowserDelegate: NSObject, ObservableObject {
     }
 }
 
-extension MPCBrowserDelegate: MCSessionDelegate {
+extension MPCBrowserManager: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         if state == .connected {
             storage.store(advertiserId: peerID.displayName)
-            hasAdvertiserSetup = true
+            Task { @MainActor in
+                hasAdvertiserSetup = true
+            }
         }
         DispatchQueue.main.async {
             self.connectedPeers = session.connectedPeers.compactMap { peerId in
@@ -64,7 +68,7 @@ extension MPCBrowserDelegate: MCSessionDelegate {
     }
 }
 
-extension MPCBrowserDelegate: MCNearbyServiceBrowserDelegate {
+extension MPCBrowserManager: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
                  withDiscoveryInfo info: [String : String]?) {
         peerIdDiscoveryInfo[peerID] = info ?? [:]

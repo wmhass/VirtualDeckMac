@@ -9,19 +9,19 @@ import SwiftUI
 
 @main
 struct VirtualDeckVisionApp: App {
-    let browserDelegate = MPCBrowserDelegate()
+    let browserManager = MPCBrowserManager()
 
     var body: some Scene {
         WindowGroup {
-            ContentView(sendCommand: { command in
+            InitialViewVision(sendCommand: { command in
                 do {
-                    try browserDelegate.browser.sendCrossDeviceMessage(CrossDeviceMessage(
+                    try browserManager.browser.sendCrossDeviceMessage(CrossDeviceMessage(
                         messageType: .command(command: command)
                     ))
                 } catch {
                     print("Error sending command: \(error)")
                 }
-            }).environmentObject(browserDelegate)
+            }).environmentObject(browserManager)
         }
         .defaultSize(width: 410, height: 360)
     }
