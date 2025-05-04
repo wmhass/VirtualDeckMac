@@ -18,7 +18,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @Published var connectedClients: [String] = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        storage.store(authCode: "123456")
         print("✅ AppDelegate: did finish launching")
         connectToXPC()
     }

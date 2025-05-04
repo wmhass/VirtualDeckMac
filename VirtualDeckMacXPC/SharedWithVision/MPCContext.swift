@@ -9,7 +9,7 @@ import Foundation
 import MultipeerConnectivity
 
 struct Handshake: Codable {
-    let authCode: String
+    let pairingCode: String
 }
 
 struct MPCContext: Codable {

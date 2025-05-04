@@ -12,7 +12,7 @@ class MPCBrowser: NSObject {
     private let browser: MCNearbyServiceBrowser
     private let peerIdStorage = PeerIdStorage()
     weak var sessionDelegateBridge: MCSessionDelegate?
-    private(set) var peerIdDiscoveryInfo: [MCPeerID: [String: String]] = [:]
+    weak var browserDelegateBridge: MCNearbyServiceBrowserDelegate?
 
     override init() {
         let peerIdString = peerIdStorage.peerId ?? peerIdStorage.generateAndStorePeerId(prefix: "VisionPro")
@@ -29,16 +29,11 @@ class MPCBrowser: NSObject {
         let data = try JSONEncoder().encode(crossDeviceMessage)
         try session.send(data, toPeers: session.connectedPeers, with: .reliable)
     }
-}
 
-
-extension MPCBrowser: MCNearbyServiceBrowserDelegate {
-    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
-                 withDiscoveryInfo info: [String : String]?) {
-        peerIdDiscoveryInfo[peerID] = info ?? [:]
-        print("Found peer: \(peerID)")
+    func connect(to peerID: MCPeerID, pairingCode: String?) {
+        browser.stopBrowsingForPeers()
         let context = MPCContext(
-            handshake: Handshake(authCode: "123456"),
+            handshake: pairingCode != nil ? Handshake(pairingCode: pairingCode!) : nil,
             deviceReadableName: UIDevice.current.name
         )
         browser.invitePeer(
@@ -47,6 +42,14 @@ extension MPCBrowser: MCNearbyServiceBrowserDelegate {
             withContext: try? JSONEncoder().encode(context),
             timeout: 30
         )
+    }
+}
+
+
+extension MPCBrowser: MCNearbyServiceBrowserDelegate {
+    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
+                 withDiscoveryInfo info: [String : String]?) {
+        browserDelegateBridge?.browser(browser, foundPeer: peerID, withDiscoveryInfo: info)
     }
 
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {

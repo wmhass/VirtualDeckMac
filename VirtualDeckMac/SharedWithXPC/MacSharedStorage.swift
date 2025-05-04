@@ -21,12 +21,12 @@ struct MacSharedStorage {
     }
 
     // MARK: - Auth Code
-    var authCode: String? {
-        userDefaults.string(forKey: "authCode")
+    var pairingCode: String? {
+        userDefaults.string(forKey: "pairingCode")
     }
 
-    func store(authCode: String?) {
-        userDefaults.set(authCode, forKey: "authCode")
+    func store(pairingCode: String?) {
+        userDefaults.set(pairingCode, forKey: "pairingCode")
     }
 
     // MARK: - Trusted Devices

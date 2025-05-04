@@ -33,14 +33,14 @@ struct ContentView: View {
             if !showPairCodeInputText {
                 Button("Pair a new device") {
                     let code = Int.random(in: 1000...9999)
-                    appDelegate.storage.store(authCode: String(code))
+                    appDelegate.storage.store(pairingCode: String(code))
                     showPairCodeInputText = true
                 }
             } else {
                 VStack(spacing: 8) {
                     Text("Your pairing code")
                         .font(.title3)
-                    Text(appDelegate.storage.authCode ?? "-")
+                    Text(appDelegate.storage.pairingCode ?? "-")
                         .font(.largeTitle)
                     Text("Type this in your Vision Pro")
                         .font(.caption)

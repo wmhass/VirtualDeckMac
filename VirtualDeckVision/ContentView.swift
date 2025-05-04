@@ -11,9 +11,22 @@ struct ContentView: View {
     @State private var messageToSend = ""
     @EnvironmentObject var browserDelegate: MPCBrowserDelegate
     let sendCommand: (IdentifiableCommand) -> Void
+    let storage = VisionProStorage()
+
+    @State var pairCodeText: String = ""
 
     var body: some View {
         VStack {
+            if !browserDelegate.hasAdvertiserSetup {
+                VStack {
+                    TextField("Pair code", text: $pairCodeText)
+                    Button("Pair") {
+                        browserDelegate.pair(pairingCode: pairCodeText)
+                    }
+                }
+            } else {
+
+            }
             Text("Connected Peers:")
                 .font(.headline)
             ForEach(browserDelegate.connectedPeers, id: \.self) { p in
