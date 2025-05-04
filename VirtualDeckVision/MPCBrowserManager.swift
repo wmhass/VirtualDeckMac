@@ -11,8 +11,8 @@ class MPCBrowserManager: NSObject, ObservableObject {
     let browser = MPCBrowser()
     @Published @MainActor var commands: [IdentifiableCommand] = []
     @Published @MainActor var connectedPeers: [String] = []
-    @Published @MainActor var hasAdvertiserSetup: Bool = false
-    private(set) var peerIdDiscoveryInfo: [MCPeerID: [String: String]] = [:]
+    @Published @MainActor private(set) var hasAdvertiserSetup: Bool = false
+    @Published @MainActor private(set) var peerIdDiscoveryInfo: [MCPeerID: [String: String]] = [:]
     private let storage = VisionProStorage()
 
     override init() {
@@ -25,8 +25,17 @@ class MPCBrowserManager: NSObject, ObservableObject {
     }
 
     func pair(pairingCode: String) {
-        let firstPeer = peerIdDiscoveryInfo.keys.first!
-        browser.connect(to: firstPeer, pairingCode: pairingCode)
+        Task { @MainActor in
+            let firstPeer = peerIdDiscoveryInfo.keys.first!
+            browser.connect(to: firstPeer, pairingCode: pairingCode)
+        }
+    }
+
+    func repair() {
+        storage.store(advertiserId: nil)
+        Task { @MainActor in
+            hasAdvertiserSetup = storage.advertiserId != nil
+        }
     }
 }
 
@@ -71,7 +80,10 @@ extension MPCBrowserManager: MCSessionDelegate {
 extension MPCBrowserManager: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
                  withDiscoveryInfo info: [String : String]?) {
-        peerIdDiscoveryInfo[peerID] = info ?? [:]
+        print("Did find peer: \(peerID.displayName)")
+        Task { @MainActor in
+            peerIdDiscoveryInfo[peerID] = info ?? [:]
+        }
         if peerID.displayName == storage.advertiserId {
             self.browser.connect(to: peerID, pairingCode: nil)
         }

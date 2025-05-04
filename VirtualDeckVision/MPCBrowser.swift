@@ -31,7 +31,7 @@ class MPCBrowser: NSObject {
     }
 
     func connect(to peerID: MCPeerID, pairingCode: String?) {
-        browser.stopBrowsingForPeers()
+        // browser.stopBrowsingForPeers()
         let context = MPCContext(
             handshake: pairingCode != nil ? Handshake(pairingCode: pairingCode!) : nil,
             deviceReadableName: UIDevice.current.name

@@ -15,9 +15,22 @@ struct InitialViewVision: View {
 
     @State var pairCodeText: String = ""
 
+    struct WaitingForMacView: View {
+        var body: some View {
+            VStack {
+                Text("Waiting for Mac App...")
+                    .font(.title)
+                Text("Make sure the Mac App is running")
+                    .font(.caption)
+            }
+        }
+    }
+
     var body: some View {
         VStack {
-            if !browserManager.hasAdvertiserSetup {
+            if browserManager.peerIdDiscoveryInfo.isEmpty {
+                WaitingForMacView()
+            } else if !browserManager.hasAdvertiserSetup {
                 VStack(spacing: 20) {
                     Spacer()
                     Text("Enter Pair Code")
@@ -39,6 +52,13 @@ struct InitialViewVision: View {
                     }
                     .frame(width: 200)
                     Spacer()
+                }
+            } else if browserManager.connectedPeers.isEmpty {
+                VStack {
+                    WaitingForMacView()
+                    Button("Pair again") {
+                        browserManager.repair()
+                    }
                 }
             } else {
                 VStack(spacing: 4) {
