@@ -27,6 +27,7 @@ class MPCAdvertiser: NSObject {
             serviceType: serviceType
         )
         super.init()
+        macSharedStorage.store(authCode: nil)
         session.delegate = self
         advertiser.delegate = self
         advertiser.startAdvertisingPeer()
@@ -52,6 +53,7 @@ extension MPCAdvertiser: MCNearbyServiceAdvertiserDelegate {
             invitationHandler(true, session)
         } else if let handshake = mpcContext.handshake,
                   handshake.authCode == macSharedStorage.authCode {
+            macSharedStorage.store(authCode: nil)
             macSharedStorage.store(trustedDevice: peerID.displayName)
             print("🔐 Trusted device invited: \(peerID.displayName)")
             peerIdContext[peerID] = mpcContext

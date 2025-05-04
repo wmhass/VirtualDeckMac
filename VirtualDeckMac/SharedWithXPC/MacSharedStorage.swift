@@ -25,7 +25,7 @@ struct MacSharedStorage {
         userDefaults.string(forKey: "authCode")
     }
 
-    func store(authCode: String) {
+    func store(authCode: String?) {
         userDefaults.set(authCode, forKey: "authCode")
     }
 
