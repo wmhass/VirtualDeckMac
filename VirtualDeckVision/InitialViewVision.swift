@@ -43,7 +43,9 @@ struct InitialViewVision: View {
                         .padding(.horizontal)
 
                     Button(action: {
-                        browserManager.pair(pairingCode: pairCodeText)
+                        // TODO: Show a Peer Selector
+                        let firstPeer = browserManager.peerIdDiscoveryInfo.keys.first!
+                        browserManager.pair(pairingCode: pairCodeText, peerId: firstPeer)
                         pairCodeText = ""
                     }) {
                         Text("Pair")

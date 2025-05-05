@@ -24,10 +24,9 @@ class MPCBrowserManager: NSObject, ObservableObject {
         }
     }
 
-    func pair(pairingCode: String) {
+    func pair(pairingCode: String, peerId: MCPeerID) {
         Task { @MainActor in
-            let firstPeer = peerIdDiscoveryInfo.keys.first!
-            browser.connect(to: firstPeer, pairingCode: pairingCode)
+            browser.connect(to: peerId, pairingCode: pairingCode)
         }
     }
 
