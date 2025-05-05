@@ -44,7 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3D114E952DA82A63004B7E5F /* VirtualDeckMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDeckMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D114E952DA82A63004B7E5F /* ActionDeck Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ActionDeck Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D199F002DAC795200A08DB9 /* VirtualDeckVision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDeckVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D199F032DAC795200A08DB9 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		3DC7A1342DAED2F3001BA350 /* VirtualDeckMacXPC.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = VirtualDeckMacXPC.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,7 +160,7 @@
 		3D114E962DA82A63004B7E5F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3D114E952DA82A63004B7E5F /* VirtualDeckMac.app */,
+				3D114E952DA82A63004B7E5F /* ActionDeck Mac.app */,
 				3D199F002DAC795200A08DB9 /* VirtualDeckVision.app */,
 				3DC7A1342DAED2F3001BA350 /* VirtualDeckMacXPC.xpc */,
 			);
@@ -207,7 +207,7 @@
 			packageProductDependencies = (
 			);
 			productName = VirtualDeckMac;
-			productReference = 3D114E952DA82A63004B7E5F /* VirtualDeckMac.app */;
+			productReference = 3D114E952DA82A63004B7E5F /* ActionDeck Mac.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */ = {
@@ -501,7 +501,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.williamhass.VirtualDeckMac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "ActionDeck Mac";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -534,7 +534,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.williamhass.VirtualDeckMac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "ActionDeck Mac";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

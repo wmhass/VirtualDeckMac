@@ -44,6 +44,7 @@ struct InitialViewVision: View {
 
                     Button(action: {
                         browserManager.pair(pairingCode: pairCodeText)
+                        pairCodeText = ""
                     }) {
                         Text("Pair")
                             .font(.headline)

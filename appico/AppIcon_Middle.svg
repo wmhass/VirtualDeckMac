@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2133F6"/>
+      <stop offset="50%" stop-color="#2635D2"/>
+      <stop offset="100%" stop-color="#6433F6"/>
+    </linearGradient>
+    <radialGradient id="bodyGlow" cx="28%" cy="28%" r="55%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="keyFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DEE6FF"/>
+      <stop offset="100%" stop-color="#9FB2FF"/>
+    </linearGradient>
+    <linearGradient id="keyShadow" x1="0" y1="0" x2="0" y2="100%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2">
+    <!-- Row 1 -->
+    <g><rect x="96" y="152" width="96" height="96" rx="20" ry="20" fill="url(#keyFace)"/></g>
+    <g><rect x="208" y="152" width="96" height="96" rx="20" ry="20" fill="url(#keyFace)"/></g>
+    <g><rect x="320" y="152" width="96" height="96" rx="20" ry="20" fill="url(#keyFace)"/></g>
+
+    <!-- Row 2 -->
+    <g><rect x="96" y="264" width="96" height="96" rx="20" ry="20" fill="url(#keyFace)"/></g>
+    <g><rect x="208" y="264" width="96" height="96" rx="20" ry="20" fill="url(#keyFace)"/></g>
+    <g><rect x="320" y="264" width="96" height="96" rx="20" ry="20" fill="url(#keyFace)"/></g>
+  </g>
+</svg>
