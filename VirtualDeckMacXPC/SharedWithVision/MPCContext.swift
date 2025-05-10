@@ -13,6 +13,6 @@ struct Handshake: Codable {
 }
 
 struct MPCContext: Codable {
-    let handshake: Handshake?
+    let handshake: Handshake
     let deviceReadableName: String
 }

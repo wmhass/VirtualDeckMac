@@ -19,6 +19,7 @@ class MPCAdvertiser: NSObject {
         UserDefaults.standard.set(nil, forKey: "peerId")
         let prefix = "Mac"
         let peerIdString = peerIdStorage.peerId ?? peerIdStorage.generateAndStorePeerId(prefix: prefix)
+        print("Advertiser Peer ID: \(peerIdString)")
         let peerId = MCPeerID(displayName: peerIdString)
         session = MCSession(peer: peerId, securityIdentity: nil, encryptionPreference: .required)
         advertiser = MCNearbyServiceAdvertiser(
@@ -45,19 +46,21 @@ class MPCAdvertiser: NSObject {
 extension MPCAdvertiser: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID,
                     withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        print("Advertiser received invitation from \(peerID.displayName)")
         guard let context, let mpcContext = try? JSONDecoder().decode(MPCContext.self, from: context) else {
             print("🚫 Rejecting \(peerID.displayName)")
             invitationHandler(false, session)
             return
         }
-        if macSharedStorage.trustedDevices.contains(peerID.displayName) {
+        let trustedDevices = macSharedStorage.trustedDevices
+        if trustedDevices[peerID.displayName] == mpcContext.handshake.pairingCode {
             print("🔐 Already trusted device invited: \(peerID.displayName)")
             peerIdContext[peerID] = mpcContext
             invitationHandler(true, session)
-        } else if let handshake = mpcContext.handshake,
-                  handshake.pairingCode == macSharedStorage.pairingCode {
+        } else if trustedDevices[peerID.displayName] == nil,
+                  mpcContext.handshake.pairingCode == macSharedStorage.pairingCode {
             macSharedStorage.store(pairingCode: nil)
-            macSharedStorage.store(trustedDevice: peerID.displayName)
+            macSharedStorage.store(trustedDevice: peerID.displayName, pairingCode: mpcContext.handshake.pairingCode)
             print("🔐 Trusted device invited: \(peerID.displayName)")
             peerIdContext[peerID] = mpcContext
             invitationHandler(true, session)
@@ -65,6 +68,10 @@ extension MPCAdvertiser: MCNearbyServiceAdvertiserDelegate {
             print("🚫 Rejecting \(peerID.displayName)")
             invitationHandler(false, session)
         }
+    }
+
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: any Error) {
+        print("didNotStartAdvertisingPeer: \(error.localizedDescription)")
     }
 }
 

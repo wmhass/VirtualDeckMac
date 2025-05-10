@@ -9,28 +9,53 @@ import SwiftUI
 
 struct InitialViewVision: View {
     @EnvironmentObject var browserManager: MPCBrowserManager
-    let storage = VisionProStorage()
 
-    @State var pairCodeText: String = ""
+    var body: some View {
+        VStack {
+            switch browserManager.browserState {
+                case .didntSetup:
+                    SetupView()
+                case .didSetupButPeerIsNotAvailable:
+                    DidSetupButPeerNotAvailable()
+                case .didSetupAndPeerIsConnected:
+                    PeerConnectedView()
+            }
+        }
+        .padding()
+    }
 
-    struct WaitingForMacView: View {
+    struct DidSetupButPeerNotAvailable: View {
+
+        @EnvironmentObject var browserManager: MPCBrowserManager
+
         var body: some View {
-            VStack(spacing: 8) {
+            VStack(spacing: 16) {
                 Text("Waiting for Mac App...")
                     .font(.title)
-                Text("Make sure the Mac App is running")
+                Text("Make sure the Mac App is running on \(browserManager.savedPeerInfo?.readableName ?? "-")")
                     .font(.caption)
+                Button("Pair again") {
+                    browserManager.repair()
+                }
             }
         }
     }
 
-    var body: some View {
-        VStack {
-            if browserManager.peerIdDiscoveryInfo.isEmpty {
-                WaitingForMacView()
-            } else if !browserManager.hasAdvertiserSetup {
-                VStack(spacing: 20) {
-                    Spacer()
+    struct SetupView: View {
+        @State var pairCodeText: String = ""
+        @State var selectedPeer: PeerInfo?
+        @State var validationError: String?
+        @EnvironmentObject var browserManager: MPCBrowserManager
+
+        var body: some View {
+            VStack(spacing: 20) {
+                Spacer()
+                if browserManager.availablePeers.isEmpty {
+                    Text("No Macs Found")
+                        .font(.title)
+                    Text("Make sure the Mac App is running")
+                        .font(.caption)
+                } else {
                     Text("Enter Pair Code")
                         .font(.title)
                     TextField("1234", text: $pairCodeText)
@@ -40,49 +65,76 @@ struct InitialViewVision: View {
                         .frame(width: 200)
                         .padding(.horizontal)
 
+                    Picker("Available peers", selection: $selectedPeer) {
+                        ForEach(browserManager.availablePeers, id: \.self) { peer in
+                            Text(peer.readableName).tag(peer as PeerInfo?)
+                                .labelStyle(.titleOnly)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .font(.caption2)
+                    .onAppear {
+                        if selectedPeer == nil , let first = browserManager.availablePeers.first {
+                            withAnimation {
+                                selectedPeer = first
+                            }
+                        }
+                    }
+                    if let errorPairing = browserManager.errorPairing {
+                        Text("\(errorPairing)").font(.caption)
+                    }
+                    if let validationError {
+                        Text("\(validationError)").font(.caption)
+                    }
                     Button(action: {
-                        // TODO: Show a Peer Selector
-                        let firstPeer = browserManager.peerIdDiscoveryInfo.keys.first!
-                        browserManager.pair(pairingCode: pairCodeText, peerId: firstPeer)
-                        pairCodeText = ""
+                        validationError = nil
+                        guard let selectedPeer else {
+                            validationError = "No peer selected"
+                            return
+                        }
+                        guard pairCodeText.isEmpty == false else {
+                            validationError = "Pair code can not be empty"
+                            return
+                        }
+                        browserManager.pair(pairingCode: pairCodeText, peerId: selectedPeer.peerId)
                     }) {
-                        Text("Pair")
+                        Text(browserManager.connectionState == .connecting ? "Pairing..." : "Pair")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
+                            .disabled(browserManager.connectionState == .connecting)
                     }
                     .frame(width: 200)
-                    Spacer()
                 }
-            } else if let connectedPeer = browserManager.connectedPeer {
-                VStack(spacing: 4) {
-                    FixedGridView(commands: browserManager.commands, buttonClicked: { item in
-                        sendCommand(item)
-                    })
-                    HStack {
-                        Text("Connected to: \(connectedPeer)")
-                            .font(.caption)
-                    }
-                }
-            } else {
-                VStack {
-                    WaitingForMacView()
-                    Button("Pair again") {
-                        browserManager.repair()
-                    }
+                Spacer()
+            }
+
+        }
+    }
+
+    struct PeerConnectedView: View {
+        @EnvironmentObject var browserManager: MPCBrowserManager
+
+        var body: some View {
+            VStack(spacing: 4) {
+                FixedGridView(commands: browserManager.commands, buttonClicked: { item in
+                    sendCommand(item)
+                })
+                HStack {
+                    Text("Connected to: \(browserManager.connectedPeer?.readableName ?? "-")")
+                        .font(.caption)
                 }
             }
         }
-        .padding()
-    }
 
-    func sendCommand(_ command: IdentifiableCommand) {
-        do {
-            try browserManager.sendCrossDeviceMessage(CrossDeviceMessage(
-                messageType: .command(command: command)
-            ))
-        } catch {
-            print("Error sending command: \(error)")
+        func sendCommand(_ command: IdentifiableCommand) {
+            do {
+                try browserManager.sendCrossDeviceMessage(CrossDeviceMessage(
+                    messageType: .command(command: command)
+                ))
+            } catch {
+                print("Error sending command: \(error)")
+            }
         }
     }
 }
@@ -117,9 +169,4 @@ struct FixedGridView: View {
             .padding()
         }
     }
-}
-
-#Preview(windowStyle: .automatic) {
-    InitialViewVision()
-        .environmentObject(MPCBrowserManager(browser: MPCBroswerPreview(), storage: VisionProStoragePreview()))
 }

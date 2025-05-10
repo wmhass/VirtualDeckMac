@@ -30,13 +30,13 @@ struct MacSharedStorage {
     }
 
     // MARK: - Trusted Devices
-    var trustedDevices: [String] {
-        return userDefaults.array(forKey: "trustedDevices") as? [String] ?? []
+    var trustedDevices: [String: String] {
+        return userDefaults.dictionary(forKey: "trustedDevices") as? [String: String] ?? [:]
     }
 
-    func store(trustedDevice: String) {
+    func store(trustedDevice: String, pairingCode: String) {
         var trustedDevices = self.trustedDevices
-        trustedDevices.append(trustedDevice)
+        trustedDevices[trustedDevice] = pairingCode
         userDefaults.set(trustedDevices, forKey: "trustedDevices")
     }
 }
