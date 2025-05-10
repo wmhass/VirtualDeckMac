@@ -11,17 +11,11 @@ import ApplicationServices
 
 struct InitialViewMac: View {
     @State private var messageToSend = ""
-    @State private var showPairCodeInputText: Bool = false
     @EnvironmentObject private var appDelegate: AppDelegate
     @State private var hasAccessibilityEnabled: Bool = true
 
     var body: some View {
         VStack(spacing: 24) {
-            if !hasAccessibilityEnabled {
-                Text("Accessibility Permission Required")
-                    .font(.title)
-                Text("Open System Settings > Privacy & Security > Accessibility and give ActionDeck accessibility permission to be able to resize windows and trigger shortcuts.")
-            }
             VStack(spacing: 8) {
                 Text("Connected devices")
                     .font(.title)
@@ -31,18 +25,14 @@ struct InitialViewMac: View {
                 } else {
                     VStack {
                         ForEach(appDelegate.connectedClients, id: \.self) { clientName in
-                            Text(clientName).font(.subheadline)
+                            HStack {
+                                Text(clientName).font(.subheadline)
+                            }
                         }
                     }
                 }
             }
-            if !showPairCodeInputText {
-                Button("Pair a new device") {
-                    let code = Int.random(in: 1000...9999)
-                    appDelegate.storage.store(pairingCode: String(code))
-                    showPairCodeInputText = true
-                }
-            } else {
+            if appDelegate.isPairing {
                 VStack(spacing: 8) {
                     Text("Your pairing code")
                         .font(.title3)
@@ -52,10 +42,23 @@ struct InitialViewMac: View {
                         .font(.caption)
                     HStack {
                         Button("Cancel") {
-                            showPairCodeInputText = false
+                            appDelegate.cancelPairing()
                         }
                     }
-
+                }
+            } else {
+                Button("Pair a new device") {
+                    appDelegate.prepareForPairing()
+                }
+            }
+            if !hasAccessibilityEnabled {
+                VStack(spacing: 8) {
+                    Text("Accessibility Permission Required")
+                        .font(.title3)
+                        .multilineTextAlignment(.center)
+                    Text("Open System Settings > Privacy & Security > Accessibility and give ActionDeck accessibility permission to be able to resize windows and trigger shortcuts.")
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
                 }
             }
         }

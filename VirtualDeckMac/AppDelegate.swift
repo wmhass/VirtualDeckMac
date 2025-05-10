@@ -9,13 +9,13 @@ import Foundation
 import AppKit
 
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    var xpcServer: XPCServerProtocol?
+    private(set) var xpcServer: XPCServerProtocol?
     var connection: NSXPCConnection?
     let commandHandler = CommandHandler()
     let storage = MacSharedStorage()
 
-    @Published var messages: [String] = []
     @Published var connectedClients: [String] = []
+    @Published @MainActor var isPairing: Bool = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         print("✅ AppDelegate: did finish launching")
@@ -45,14 +45,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             print("❌ XPC proxy error: \(error.localizedDescription)")
         } as? XPCServerProtocol
 
-        // TODO: Send handshake
-//        try? xpcServer?.handleMessage(xpcMessage: XPCMessage(
-//            messageType: .saveAuthCode(authCode: "12345")
-//        ))
-
         print("XPC Server: \(String(describing: xpcServer))")
 
         publishCommands()
+    }
+
+    func prepareForPairing() {
+        let code = Int.random(in: 1000...9999)
+        storage.store(pairingCode: String(code))
+        Task { @MainActor in
+            isPairing = true
+        }
+    }
+
+    func cancelPairing() {
+        storage.store(pairingCode: nil)
+        Task { @MainActor in
+            isPairing = false
+        }
     }
 }
 
@@ -61,9 +71,6 @@ extension AppDelegate: XPCClientProtocol {
     func handleMessageFromServer(data: Data) {
         do {
             let xpcMessage = try JSONDecoder().decode(XPCMessage.self, from: data)
-            DispatchQueue.main.async {
-                self.messages.append("Received: \(String(describing: xpcMessage))")
-            }
             switch xpcMessage.messageType {
                 case .crossDeviceMessage(message: let crossDeviceMessage):
                     switch crossDeviceMessage.messageType {
@@ -75,6 +82,11 @@ extension AppDelegate: XPCClientProtocol {
                             break;
                     }
                 case .clientsUpdated(clients: let clients):
+                    Task { @MainActor in
+                        if isPairing {
+                            isPairing = false
+                        }
+                    }
                     print("Clients updated: \(String(describing: clients))")
                     DispatchQueue.main.async {
                         self.connectedClients = clients
