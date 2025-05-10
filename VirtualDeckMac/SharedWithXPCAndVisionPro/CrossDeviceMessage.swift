@@ -15,6 +15,11 @@ struct CrossDeviceMessage: Codable {
     let messageType: MessageType
 }
 
+struct ConnectedPeer: Codable, Hashable {
+    let readableName: String
+    let peerId: String
+}
+
 struct IdentifiableCommand: Identifiable, Codable {
     let id: String
     let imageName: String

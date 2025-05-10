@@ -19,14 +19,17 @@ struct InitialViewMac: View {
             VStack(spacing: 8) {
                 Text("Connected devices")
                     .font(.title)
-                if appDelegate.connectedClients.isEmpty {
+                if appDelegate.connectedPeers.isEmpty {
                     Text("No devices connected.")
                         .font(.caption)
                 } else {
                     VStack {
-                        ForEach(appDelegate.connectedClients, id: \.self) { clientName in
+                        ForEach(appDelegate.connectedPeers, id: \.self) { connectedPeer in
                             HStack {
-                                Text(clientName).font(.subheadline)
+                                Text(connectedPeer.readableName).font(.subheadline)
+                                Button("Remove") {
+                                    appDelegate.removeConnectedPeer(connectedPeer)
+                                }
                             }
                         }
                     }

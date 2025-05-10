@@ -30,18 +30,21 @@ extension XPCServer: NSXPCListenerDelegate {
         }
         connectedXpcClient = newConnection.remoteObjectProxy as? XPCClientProtocol
         newConnection.resume()
-        updateXPCClientWithConnectedClients()
+        updateXPCClientWithConnectedPeers()
         return true
     }
 
-    private func updateXPCClientWithConnectedClients() {
+    private func updateXPCClientWithConnectedPeers() {
         do {
-            let connectedClients = advertiser.session.connectedPeers.compactMap {
-                advertiser.peerIdContext[$0]?.deviceReadableName
-            }
+            let connectedPeers = advertiser.session?.connectedPeers.compactMap {
+                ConnectedPeer(
+                    readableName: advertiser.peerIdContext[$0]?.deviceReadableName ?? $0.displayName,
+                    peerId: $0.displayName
+                )
+            } ?? []
             try connectedXpcClient?.handleMessageFromServer(
                 xpcMessage: XPCMessage(
-                    messageType: .clientsUpdated(clients: connectedClients)
+                    messageType: .clientsUpdated(clients: connectedPeers)
                 )
             )
         } catch {
@@ -52,7 +55,7 @@ extension XPCServer: NSXPCListenerDelegate {
 
 extension XPCServer: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        updateXPCClientWithConnectedClients()
+        updateXPCClientWithConnectedPeers()
     }
 
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -91,6 +94,8 @@ extension XPCServer: XPCServerProtocol {
                     try advertiser.sendCrossDeviceMessage(message)
                 case .clientsUpdated:
                     break;
+                case .removePeer(connectedPeer: let connectedPeer):
+                    advertiser.removePeer(peerId: connectedPeer.peerId)
             }
         } catch {
             print("Error handling XPC Message: \(error) // \(String(describing: String(data: data, encoding: .utf8)))")

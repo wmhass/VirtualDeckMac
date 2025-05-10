@@ -10,7 +10,8 @@ import Foundation
 struct XPCMessage: Codable {
     enum MessageType: Codable {
         case crossDeviceMessage(message: CrossDeviceMessage)
-        case clientsUpdated(clients: [String])
+        case clientsUpdated(clients: [ConnectedPeer])
+        case removePeer(connectedPeer: ConnectedPeer)
     }
     let messageType: MessageType
 }

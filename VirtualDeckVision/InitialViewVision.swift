@@ -137,6 +137,7 @@ struct InitialViewVision: View {
                     Button("Unpair") {
                         showUnpairConfirmation = true
                     }
+                    .font(.caption2)
                     .alert("Are you sure you want to unpair?", isPresented: $showUnpairConfirmation) {
                         Button("Cancel", role: .cancel) {}
                         Button("Unpair", role: .destructive) {

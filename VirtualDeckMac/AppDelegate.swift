@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     let commandHandler = CommandHandler()
     let storage = MacSharedStorage()
 
-    @Published var connectedClients: [String] = []
+    @Published var connectedPeers: [ConnectedPeer] = []
     @Published @MainActor var isPairing: Bool = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -64,6 +64,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             isPairing = false
         }
     }
+
+    func removeConnectedPeer(_ connectedPeer: ConnectedPeer) {
+        try? xpcServer?.handleMessageFromClient(xpcMessage: XPCMessage(
+            messageType: .removePeer(connectedPeer: connectedPeer)
+        ))
+    }
 }
 
 extension AppDelegate: XPCClientProtocol {
@@ -89,9 +95,11 @@ extension AppDelegate: XPCClientProtocol {
                     }
                     print("Clients updated: \(String(describing: clients))")
                     DispatchQueue.main.async {
-                        self.connectedClients = clients
+                        self.connectedPeers = clients
                     }
                     publishCommands()
+                case .removePeer(connectedPeer: let connectedPeer):
+                    print("Only server supports removing clients")
             }
         } catch {
             print("Error decoding XPCMessage from the server: \(error)")

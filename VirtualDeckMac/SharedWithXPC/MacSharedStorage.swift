@@ -34,7 +34,7 @@ struct MacSharedStorage {
         return userDefaults.dictionary(forKey: "trustedDevices") as? [String: String] ?? [:]
     }
 
-    func store(trustedDevice: String, pairingCode: String) {
+    func store(trustedDevice: String, pairingCode: String?) {
         var trustedDevices = self.trustedDevices
         trustedDevices[trustedDevice] = pairingCode
         userDefaults.set(trustedDevices, forKey: "trustedDevices")

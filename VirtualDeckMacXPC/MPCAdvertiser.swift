@@ -7,16 +7,21 @@
 import MultipeerConnectivity
 
 class MPCAdvertiser: NSObject {
-    let session: MCSession
+    private(set) var session: MCSession?
+    private var advertiser: MCNearbyServiceAdvertiser?
     private let serviceType = "vmchat"
-    private let advertiser: MCNearbyServiceAdvertiser
     private let macSharedStorage = MacSharedStorage()
     private let peerIdStorage = PeerIdStorage()
     var sessionDelegateBridge: MCSessionDelegate?
     private(set) var peerIdContext: [MCPeerID: MPCContext] = [:]
 
     override init() {
-        UserDefaults.standard.set(nil, forKey: "peerId")
+        super.init()
+        macSharedStorage.store(pairingCode: nil)
+        reconnect()
+    }
+
+    func reconnect() {
         let prefix = "Mac"
         let peerIdString = peerIdStorage.peerId ?? peerIdStorage.generateAndStorePeerId(prefix: prefix)
         print("Advertiser Peer ID: \(peerIdString)")
@@ -27,19 +32,27 @@ class MPCAdvertiser: NSObject {
             discoveryInfo: ["readableName": Host.current().localizedName ?? "Mac"],
             serviceType: serviceType
         )
-        super.init()
-        macSharedStorage.store(pairingCode: nil)
-        session.delegate = self
-        advertiser.delegate = self
-        advertiser.startAdvertisingPeer()
+        session?.delegate = self
+        advertiser?.delegate = self
+        advertiser?.startAdvertisingPeer()
     }
 
     func sendCrossDeviceMessage(_ crossDeviceMessage: CrossDeviceMessage) throws {
-        guard !session.connectedPeers.isEmpty else {
+        guard let session, !session.connectedPeers.isEmpty else {
             return
         }
         let data = try JSONEncoder().encode(crossDeviceMessage)
         try session.send(data, toPeers: session.connectedPeers, with: .reliable)
+    }
+
+    func removePeer(peerId: String) {
+        guard let session else { return }
+        if let connectedPeer = session.connectedPeers.first(where: { $0.displayName == peerId }) {
+            print("Removing \(connectedPeer.displayName) from session")
+            macSharedStorage.store(trustedDevice: connectedPeer.displayName, pairingCode: nil)
+            session.disconnect()
+            reconnect()
+        }
     }
 }
 
