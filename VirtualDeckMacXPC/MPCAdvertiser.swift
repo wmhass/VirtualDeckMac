@@ -57,8 +57,7 @@ extension MPCAdvertiser: MCNearbyServiceAdvertiserDelegate {
             print("🔐 Already trusted device invited: \(peerID.displayName)")
             peerIdContext[peerID] = mpcContext
             invitationHandler(true, session)
-        } else if trustedDevices[peerID.displayName] == nil,
-                  mpcContext.handshake.pairingCode == macSharedStorage.pairingCode {
+        } else if mpcContext.handshake.pairingCode == macSharedStorage.pairingCode {
             macSharedStorage.store(pairingCode: nil)
             macSharedStorage.store(trustedDevice: peerID.displayName, pairingCode: mpcContext.handshake.pairingCode)
             print("🔐 Trusted device invited: \(peerID.displayName)")

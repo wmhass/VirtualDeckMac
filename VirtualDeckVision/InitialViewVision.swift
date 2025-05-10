@@ -29,11 +29,12 @@ struct InitialViewVision: View {
         @EnvironmentObject var browserManager: MPCBrowserManager
 
         var body: some View {
-            VStack(spacing: 16) {
+            VStack(alignment: .center, spacing: 16) {
                 Text("Waiting for Mac App...")
                     .font(.title)
                 Text("Make sure the Mac App is running on \(browserManager.savedPeerInfo?.readableName ?? "-")")
                     .font(.caption)
+                    .multilineTextAlignment(.center)
                 Button("Pair again") {
                     browserManager.repair()
                 }
@@ -73,10 +74,19 @@ struct InitialViewVision: View {
                     }
                     .pickerStyle(.menu)
                     .font(.caption2)
-                    .onAppear {
-                        if selectedPeer == nil , let first = browserManager.availablePeers.first {
+                    .task {
+                        if selectedPeer == nil, let first = browserManager.availablePeers.first {
+                            Task { @MainActor in
+                                withAnimation {
+                                    selectedPeer = first
+                                }
+                            }
+                        }
+                    }
+                    .onChange(of: browserManager.availablePeers) {
+                        Task { @MainActor in
                             withAnimation {
-                                selectedPeer = first
+                                selectedPeer = browserManager.availablePeers.first
                             }
                         }
                     }
