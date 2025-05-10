@@ -32,7 +32,7 @@ struct InitialViewVision: View {
             VStack(alignment: .center, spacing: 16) {
                 Text("Waiting for Mac App...")
                     .font(.title)
-                Text("Make sure the Mac App is running on \(browserManager.savedPeerInfo?.readableName ?? "-")")
+                Text("Make sure the Mac App is running on \(browserManager.savedPeerInfo?.readableName ?? "-"). If you don't have the Mac App yet, download it at https://lilohass.com/actiondeck")
                     .font(.caption)
                     .multilineTextAlignment(.center)
                 Button("Pair again") {
@@ -54,7 +54,7 @@ struct InitialViewVision: View {
                 if browserManager.availablePeers.isEmpty {
                     Text("No Macs Found")
                         .font(.title)
-                    Text("Make sure the Mac App is running")
+                    Text("Make sure the Mac App is running. If you don't have the Mac App yet, download it at https://lilohass.com/actiondeck")
                         .font(.caption)
                 } else {
                     Text("Enter Pair Code")
