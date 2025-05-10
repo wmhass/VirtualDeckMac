@@ -33,7 +33,7 @@ struct InitialViewVision: View {
                 Text("Waiting for Mac App...")
                     .font(.title)
                 Text("Make sure the Mac App is running on \(browserManager.savedPeerInfo?.readableName ?? "-"). If you don't have the Mac App yet, download it at https://lilohass.com/actiondeck")
-                    .font(.caption)
+                    .font(.body)
                     .multilineTextAlignment(.center)
                 Button("Pair again") {
                     browserManager.repair()
@@ -55,7 +55,7 @@ struct InitialViewVision: View {
                     Text("No Macs Found")
                         .font(.title)
                     Text("Make sure the Mac App is running. If you don't have the Mac App yet, download it at https://lilohass.com/actiondeck")
-                        .font(.caption)
+                        .font(.body)
                 } else {
                     Text("Enter Pair Code")
                         .font(.title)
@@ -124,6 +124,7 @@ struct InitialViewVision: View {
 
     struct PeerConnectedView: View {
         @EnvironmentObject var browserManager: MPCBrowserManager
+        @State private var showUnpairConfirmation = false
 
         var body: some View {
             VStack(spacing: 4) {
@@ -133,6 +134,15 @@ struct InitialViewVision: View {
                 HStack {
                     Text("Connected to: \(browserManager.connectedPeer?.readableName ?? "-")")
                         .font(.caption)
+                    Button("Unpair") {
+                        showUnpairConfirmation = true
+                    }
+                    .alert("Are you sure you want to unpair?", isPresented: $showUnpairConfirmation) {
+                        Button("Cancel", role: .cancel) {}
+                        Button("Unpair", role: .destructive) {
+                            browserManager.repair()
+                        }
+                    }
                 }
             }
         }
