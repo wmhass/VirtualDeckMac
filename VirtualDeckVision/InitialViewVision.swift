@@ -17,7 +17,7 @@ struct InitialViewVision: View {
 
     struct WaitingForMacView: View {
         var body: some View {
-            VStack {
+            VStack(spacing: 8) {
                 Text("Waiting for Mac App...")
                     .font(.title)
                 Text("Make sure the Mac App is running")
@@ -56,35 +56,26 @@ struct InitialViewVision: View {
                     .frame(width: 200)
                     Spacer()
                 }
-            } else if browserManager.connectedPeers.isEmpty {
+            } else if let connectedPeer = browserManager.connectedPeer {
+                VStack(spacing: 4) {
+                    FixedGridView(commands: browserManager.commands, buttonClicked: { item in
+                        sendCommand(item)
+                    })
+                    HStack {
+                        Text("Connected to: \(connectedPeer)")
+                            .font(.caption)
+                    }
+                }
+            } else {
                 VStack {
                     WaitingForMacView()
                     Button("Pair again") {
                         browserManager.repair()
                     }
                 }
-            } else {
-                VStack(spacing: 4) {
-                    FixedGridView(commands: browserManager.commands, buttonClicked: { item in
-                        sendCommand(item)
-                    })
-                    HStack {
-                        Text("Connected to:")
-                            .font(.caption)
-                        ForEach(browserManager.connectedPeers, id: \.self) { p in
-                            Text(p)
-                                .font(.caption)
-                        }
-                    }
-                }
             }
         }
         .padding()
-    }
-}
-#Preview(windowStyle: .automatic) {
-    InitialViewVision { _ in
-
     }
 }
 
@@ -117,5 +108,11 @@ struct FixedGridView: View {
             }
             .padding()
         }
+    }
+}
+
+#Preview(windowStyle: .automatic) {
+    InitialViewVision { _ in
+
     }
 }

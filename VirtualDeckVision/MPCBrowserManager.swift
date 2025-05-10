@@ -5,23 +5,41 @@
 //  Created by William Hass on 2025-05-04.
 //
 
+protocol MPCBrowserProtocol: AnyObject {
+    func connect(to peerID: MCPeerID, pairingCode: String?)
+    func sendCrossDeviceMessage(_ crossDeviceMessage: CrossDeviceMessage) throws
+    func setDelegates(sessionDelegate: MCSessionDelegate, browserDelegate: MCNearbyServiceBrowserDelegate)
+}
+
+protocol VisionProStorageProtocol {
+    var advertiserId: String? { get }
+    func store(advertiserId: String?)
+}
+
 import MultipeerConnectivity
 class MPCBrowserManager: NSObject, ObservableObject {
 
-    let browser = MPCBrowser()
+    private let storage: VisionProStorageProtocol
+    private let browser: MPCBrowserProtocol
+
     @Published @MainActor var commands: [IdentifiableCommand] = []
-    @Published @MainActor var connectedPeers: [String] = []
+    @Published @MainActor var connectedPeer: String?
     @Published @MainActor private(set) var hasAdvertiserSetup: Bool = false
     @Published @MainActor private(set) var peerIdDiscoveryInfo: [MCPeerID: [String: String]] = [:]
-    private let storage = VisionProStorage()
 
-    override init() {
+    init(browser: MPCBrowserProtocol, storage: VisionProStorageProtocol) {
+        self.browser = browser
+        self.storage = storage
         super.init()
-        browser.sessionDelegateBridge = self
-        browser.browserDelegateBridge = self
+        browser.setDelegates(sessionDelegate: self, browserDelegate: self)
         Task { @MainActor in
             hasAdvertiserSetup = storage.advertiserId != nil
         }
+    }
+
+    @available(*, unavailable, message: "Use init(browser:storage:) instead.")
+    override init() {
+        fatalError("Unavailable initializer was called")
     }
 
     func pair(pairingCode: String, peerId: MCPeerID) {
@@ -36,6 +54,10 @@ class MPCBrowserManager: NSObject, ObservableObject {
             hasAdvertiserSetup = storage.advertiserId != nil
         }
     }
+
+    func sendCrossDeviceMessage(_ message: CrossDeviceMessage) throws {
+        try browser.sendCrossDeviceMessage(message)
+    }
 }
 
 extension MPCBrowserManager: MCSessionDelegate {
@@ -47,9 +69,9 @@ extension MPCBrowserManager: MCSessionDelegate {
             }
         }
         DispatchQueue.main.async {
-            self.connectedPeers = session.connectedPeers.compactMap { peerId in
+            self.connectedPeer = session.connectedPeers.compactMap { peerId in
                 self.peerIdDiscoveryInfo[peerId]?["readableName"]
-            }
+            }.first
         }
     }
 

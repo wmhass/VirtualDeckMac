@@ -9,20 +9,30 @@ import MultipeerConnectivity
 class MPCBrowser: NSObject {
     private let serviceType = "vmchat"
     private let session: MCSession
-    private let browser: MCNearbyServiceBrowser
+    private let nearbyServiceBrowser: MCNearbyServiceBrowser
     private let peerIdStorage = PeerIdStorage()
-    weak var sessionDelegateBridge: MCSessionDelegate?
-    weak var browserDelegateBridge: MCNearbyServiceBrowserDelegate?
+
+    weak private var sessionDelegateBridge: MCSessionDelegate?
+    weak private var browserDelegateBridge: MCNearbyServiceBrowserDelegate?
 
     override init() {
         let peerIdString = peerIdStorage.peerId ?? peerIdStorage.generateAndStorePeerId(prefix: "VisionPro")
         let peerId = MCPeerID(displayName: peerIdString)
         session = MCSession(peer: peerId, securityIdentity: nil, encryptionPreference: .required)
-        browser = MCNearbyServiceBrowser(peer: peerId, serviceType: serviceType)
+        nearbyServiceBrowser = MCNearbyServiceBrowser(peer: peerId, serviceType: serviceType)
         super.init()
         session.delegate = self
-        browser.delegate = self
-        browser.startBrowsingForPeers()
+        nearbyServiceBrowser.delegate = self
+        nearbyServiceBrowser.startBrowsingForPeers()
+    }
+}
+
+
+extension MPCBrowser: MPCBrowserProtocol {
+
+    func setDelegates(sessionDelegate: MCSessionDelegate, browserDelegate: MCNearbyServiceBrowserDelegate) {
+        self.sessionDelegateBridge = sessionDelegate
+        self.browserDelegateBridge = browserDelegate
     }
 
     func sendCrossDeviceMessage(_ crossDeviceMessage: CrossDeviceMessage) throws {
@@ -31,12 +41,11 @@ class MPCBrowser: NSObject {
     }
 
     func connect(to peerID: MCPeerID, pairingCode: String?) {
-        // browser.stopBrowsingForPeers()
         let context = MPCContext(
             handshake: pairingCode != nil ? Handshake(pairingCode: pairingCode!) : nil,
             deviceReadableName: UIDevice.current.name
         )
-        browser.invitePeer(
+        nearbyServiceBrowser.invitePeer(
             peerID,
             to: session,
             withContext: try? JSONEncoder().encode(context),
@@ -44,7 +53,6 @@ class MPCBrowser: NSObject {
         )
     }
 }
-
 
 extension MPCBrowser: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,

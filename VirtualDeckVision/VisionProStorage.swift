@@ -10,7 +10,9 @@ import Foundation
 struct VisionProStorage {
     private let advertiserIdKey: String = "advertiserId"
     private let userDefaults: UserDefaults = .standard
+}
 
+extension VisionProStorage: VisionProStorageProtocol {
     var advertiserId: String? {
         return userDefaults.string(forKey: advertiserIdKey)
     }
