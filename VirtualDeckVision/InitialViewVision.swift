@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct InitialViewVision: View {
-    @State private var messageToSend = ""
     @EnvironmentObject var browserManager: MPCBrowserManager
-    let sendCommand: (IdentifiableCommand) -> Void
     let storage = VisionProStorage()
 
     @State var pairCodeText: String = ""
@@ -77,6 +75,16 @@ struct InitialViewVision: View {
         }
         .padding()
     }
+
+    func sendCommand(_ command: IdentifiableCommand) {
+        do {
+            try browserManager.sendCrossDeviceMessage(CrossDeviceMessage(
+                messageType: .command(command: command)
+            ))
+        } catch {
+            print("Error sending command: \(error)")
+        }
+    }
 }
 
 struct FixedGridView: View {
@@ -112,7 +120,6 @@ struct FixedGridView: View {
 }
 
 #Preview(windowStyle: .automatic) {
-    InitialViewVision { _ in
-
-    }
+    InitialViewVision()
+        .environmentObject(MPCBrowserManager(browser: MPCBroswerPreview(), storage: VisionProStoragePreview()))
 }

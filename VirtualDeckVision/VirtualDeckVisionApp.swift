@@ -16,15 +16,8 @@ struct VirtualDeckVisionApp: App {
 
     var body: some Scene {
         WindowGroup {
-            InitialViewVision(sendCommand: { command in
-                do {
-                    try browserManager.sendCrossDeviceMessage(CrossDeviceMessage(
-                        messageType: .command(command: command)
-                    ))
-                } catch {
-                    print("Error sending command: \(error)")
-                }
-            }).environmentObject(browserManager)
+            InitialViewVision()
+                .environmentObject(browserManager)
         }
         .defaultSize(width: 410, height: 360)
     }
