@@ -1,0 +1,7 @@
+create-dmg \
+  --volname "ActionDeck" \
+  --window-size=500,300 \
+  --icon-size=100 \
+  --app-drop-link \
+  "./dist/ActionDeck.dmg" \
+  "./dmg-layout/ActionDeck.app"

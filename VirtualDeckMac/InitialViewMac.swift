@@ -64,6 +64,10 @@ struct InitialViewMac: View {
                         .multilineTextAlignment(.center)
                 }
             }
+            HStack {
+                Text("Need help? https://lilohass.com/contact or email wm.hass@gmail.com").font(.caption2)
+                    .multilineTextAlignment(.center)
+            }
         }
         .frame(width: 300, height: 400)
         .onAppear {
