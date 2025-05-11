@@ -4,4 +4,4 @@ create-dmg \
   --icon-size=100 \
   --app-drop-link \
   "./dist/ActionDeck.dmg" \
-  "./dmg-layout/ActionDeck.app"
+  "./ActionDeck.app"
