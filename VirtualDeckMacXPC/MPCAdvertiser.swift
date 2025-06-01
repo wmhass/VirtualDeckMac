@@ -30,7 +30,8 @@ class MPCAdvertiser: NSObject {
         advertiser = MCNearbyServiceAdvertiser(
             peer: peerId,
             discoveryInfo: AdvertiserDiscoveryInfo(
-                readableName: Host.current().localizedName ?? "Mac"
+                readableName: Host.current().localizedName ?? "Mac",
+                advertiserVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
             ).dictionaryRepresentation ,
             serviceType: serviceType
         )
