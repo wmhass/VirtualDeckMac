@@ -193,7 +193,8 @@ extension MPCBrowserManager: MCNearbyServiceBrowserDelegate {
                  withDiscoveryInfo info: [String : String]?) {
         print("Did find peer: \(peerID.displayName) // stored peer: \(String(describing: storage.peerInfo))")
         Task { @MainActor in
-            if let readableName = info?["readableName"] {
+            let advertiserDiscoveryInfo = AdvertiserDiscoveryInfo(from: info)
+            if let readableName = advertiserDiscoveryInfo.readableName {
                 print("Peer with readable name:\(readableName) found")
                 var newPeers = availablePeers
                 newPeers.removeAll(where: { $0.peerId == peerID })

@@ -5,6 +5,7 @@
 //  Created by William Hass on 2025-04-14.
 //
 
+import Foundation
 
 struct CrossDeviceMessage: Codable {
     enum MessageType: Codable {

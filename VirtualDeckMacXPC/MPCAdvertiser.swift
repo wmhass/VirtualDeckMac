@@ -29,7 +29,9 @@ class MPCAdvertiser: NSObject {
         session = MCSession(peer: peerId, securityIdentity: nil, encryptionPreference: .required)
         advertiser = MCNearbyServiceAdvertiser(
             peer: peerId,
-            discoveryInfo: ["readableName": Host.current().localizedName ?? "Mac"],
+            discoveryInfo: AdvertiserDiscoveryInfo(
+                readableName: Host.current().localizedName ?? "Mac"
+            ).dictionaryRepresentation ,
             serviceType: serviceType
         )
         session?.delegate = self

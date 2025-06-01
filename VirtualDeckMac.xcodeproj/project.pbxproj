@@ -63,6 +63,7 @@
 			membershipExceptions = (
 				SharedWithXPC/MacSharedStorage.swift,
 				SharedWithXPC/SharedXPC.swift,
+				SharedWithXPCAndVisionPro/AdvertiserDiscoveryInfo.swift,
 				SharedWithXPCAndVisionPro/CrossDeviceMessage.swift,
 			);
 			target = 3DC7A1332DAED2F3001BA350 /* VirtualDeckMacXPC */;
@@ -70,6 +71,7 @@
 		3D9431492DC6E47900B080A7 /* Exceptions for "VirtualDeckMac" folder in "VirtualDeckVision" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				SharedWithXPCAndVisionPro/AdvertiserDiscoveryInfo.swift,
 				SharedWithXPCAndVisionPro/CrossDeviceMessage.swift,
 			);
 			target = 3D199EFF2DAC795200A08DB9 /* VirtualDeckVision */;
