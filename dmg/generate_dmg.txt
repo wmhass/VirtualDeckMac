@@ -1,7 +1,40 @@
+DEVELOPER_ID="Apple Development: William Hass (2LTH5B6MPX)"
+
+codesign --force --options runtime --timestamp \
+  --sign "$DEVELOPER_ID" \
+  "ActionDeck.app/Contents/XPCServices/VirtualDeckMacXPC.xpc/Contents/MacOS/VirtualDeckMacXPC"
+
+codesign --force --options runtime --timestamp \
+  --sign "$DEVELOPER_ID" \
+  "ActionDeck.app/Contents/XPCServices/VirtualDeckMacXPC.xpc"
+
+codesign --force --options runtime --timestamp \
+  --sign "$DEVELOPER_ID" \
+  "ActionDeck.app/Contents/MacOS/ActionDeck Mac"
+
+codesign --deep --force --options runtime --timestamp \
+  --sign "$DEVELOPER_ID" \
+  "ActionDeck.app"
+
+codesign --verify --deep --strict --verbose=2 ActionDeck.app
+
 create-dmg \
   --volname "ActionDeck" \
   --window-size=500,300 \
   --icon-size=100 \
   --app-drop-link \
-  "./dist/ActionDeck.dmg" \
-  "./ActionDeck.app"
+  ActionDeck.dmg \
+  ActionDeck.app
+
+xcrun notarytool submit ActionDeck.dmg \
+  --apple-id "wm.hass@gmail.com" \
+  --team-id "R8DRDAPLCP" \
+  --password "guzd-wlcc-ysuq-xpcw" \
+  --wait
+
+xcrun notarytool log b9fd8f04-df4b-407e-9c18-f89122be3013 \
+  --apple-id "wm.hass@gmail.com" \
+  --team-id "R8DRDAPLCP" \
+  --password "guzd-wlcc-ysuq-xpcw"
+
+xcrun stapler staple ActionDeck.dmg

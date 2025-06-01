@@ -73,6 +73,12 @@ extension MPCBrowser: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState)")
         sessionDelegateBridge?.session(session, peer: peerID, didChange: state)
+        switch state {
+            case .connected:
+                nearbyServiceBrowser.stopBrowsingForPeers()
+            default:
+                nearbyServiceBrowser.startBrowsingForPeers()
+        }
     }
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         print("session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID)")

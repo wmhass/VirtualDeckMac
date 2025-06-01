@@ -147,7 +147,7 @@ extension MPCBrowserManager: MCSessionDelegate {
                     connectionState = .notConnected
             }
 
-            if state == .notConnected, peerID == attemptingToConnectToId {
+            if state == .notConnected, peerID.displayName == attemptingToConnectToId?.displayName {
                 errorPairing = "Failed to connect to \(availablePeers.first(where: { $0.peerId == peerID })?.readableName ?? peerID.displayName)"
             } else if state == .connected {
                 errorPairing = nil
@@ -194,6 +194,7 @@ extension MPCBrowserManager: MCNearbyServiceBrowserDelegate {
         print("Did find peer: \(peerID.displayName) // stored peer: \(String(describing: storage.peerInfo))")
         Task { @MainActor in
             if let readableName = info?["readableName"] {
+                print("Peer with readable name:\(readableName) found")
                 var newPeers = availablePeers
                 newPeers.removeAll(where: { $0.peerId == peerID })
                 newPeers.append(PeerInfo(
@@ -202,11 +203,16 @@ extension MPCBrowserManager: MCNearbyServiceBrowserDelegate {
                 ))
                 availablePeers = newPeers
             }
-            updateState()
-        }
-        if peerID == storage.peerInfo?.peerId, let pairingCode = storage.pairingCode {
-            print("- Peer id is stored. attempt to connect")
-            self.browser.connect(to: peerID, pairingCode: pairingCode)
+            print("Stored peerInfo: \(String(describing: storage.peerInfo))")
+            print("Stored pairingCode: \(String(describing: storage.pairingCode))")
+            if peerID.displayName == storage.peerInfo?.peerId.displayName,
+                let pairingCode = storage.pairingCode {
+                print("- Peer id is stored. attempt to connect")
+                self.browser.connect(to: peerID, pairingCode: pairingCode)
+                updateState()
+            } else {
+                updateState()
+            }
         }
     }
 
